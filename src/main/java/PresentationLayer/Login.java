@@ -10,11 +10,15 @@ import Login.LoginBean;
 import Persistence.LoginDaoImpl;
 
 import java.io.IOException;
+import javax.persistence.EntityManager;
+import utils.EMF_Creator;
 
 public class Login extends Command {
 
     @Override
     String execute(HttpServletRequest request, HttpServletResponse response) throws LoginSampleException {
+        EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
+        
         String userName = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -24,10 +28,10 @@ public class Login extends Command {
         loginBean.setPassword(password);
 
         LoginDaoImpl loginDao = new LoginDaoImpl();
-
+      
         try
         {
-            String userValidate = loginDao.verifyCredentials(loginBean);
+            String userValidate = loginDao.verifyCredentials(loginBean, em);
 
             if(userValidate.equals("Admin_Role"))
             {

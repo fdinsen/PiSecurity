@@ -4,15 +4,18 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
 
     <!-- login sevles -->
     <servlet>
-        <servlet-name>SomeController</servlet-name>
-        <servlet-class>Controllers.SomeController</servlet-class>
+        <servlet-name>FrontController</servlet-name>
+        <servlet-class>PresentationLayer.FrontController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>SomeController</servlet-name>
+        <servlet-name>FrontController</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 

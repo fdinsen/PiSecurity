@@ -41,7 +41,7 @@ public class Login extends Command {
                 session.setAttribute("Admin", userName); //setting session attribute
                 request.setAttribute("userName", userName);
 
-                return "admin";
+                return "/WEB-INF/admin";
             }
             else if(userValidate.equals("Editor_Role"))
             {
@@ -51,7 +51,7 @@ public class Login extends Command {
                 session.setAttribute("Editor", userName);
                 request.setAttribute("userName", userName);
 
-                return "editor";
+                return "/WEB-INF/editor";
             }
             else if(userValidate.equals("User_Role"))
             {
@@ -62,7 +62,7 @@ public class Login extends Command {
                 session.setAttribute("User", userName);
                 request.setAttribute("userName", userName);
 
-                return "user";
+                return "/WEB-INF/user";
             }
             else
             {

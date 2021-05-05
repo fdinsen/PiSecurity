@@ -35,9 +35,9 @@ public class Register extends Command{
             request.setAttribute("errMessage", "User by given username already exists.");
             return "register";
         }else {
-            request.setAttribute("errMessage", "User created successfully.");
+            request.setAttribute("message", "User created successfully.");
             createUserDao.createUser(userName, password, em);
-            return "index";
+            return "login";
         }
         
     }

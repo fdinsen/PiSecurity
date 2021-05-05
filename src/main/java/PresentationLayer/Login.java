@@ -69,13 +69,13 @@ public class Login extends Command {
                 System.out.println("Error message = "+userValidate);
                 request.setAttribute("errMessage", userValidate);
 
-                return "index";
+                return "login";
             }
         }
         catch (Exception e1)
         {
             e1.printStackTrace();
-            return "index";
+            return "login";
         }
     } //End of doPost()
 }

@@ -12,15 +12,17 @@ import Persistence.LoginDaoImpl;
 import java.io.IOException;
 import javax.persistence.EntityManager;
 import utils.EMF_Creator;
+import org.apache.commons.text.StringEscapeUtils;
 
 public class Login extends Command {
 
     @Override
     String execute(HttpServletRequest request, HttpServletResponse response) throws LoginSampleException {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
-        
-        String userName = request.getParameter("username");
-        String password = request.getParameter("password");
+
+        //Escapes HTML tags
+        String userName = StringEscapeUtils.escapeHtml4(request.getParameter("username"));
+        String password = StringEscapeUtils.escapeHtml4(request.getParameter("password"));
 
         LoginBean loginBean = new LoginBean();
 
@@ -28,13 +30,11 @@ public class Login extends Command {
         loginBean.setPassword(password);
 
         LoginDaoImpl loginDao = new LoginDaoImpl();
-      
-        try
-        {
+
+        try {
             String userValidate = loginDao.verifyCredentials(loginBean, em);
 
-            if(userValidate.equals("Admin_Role"))
-            {
+            if (userValidate.equals("Admin_Role")) {
                 System.out.println("Admin's Home");
 
                 HttpSession session = request.getSession(); //Creating a session
@@ -43,8 +43,7 @@ public class Login extends Command {
 
                 return "/WEB-INF/admin";
             }
-            else if(userValidate.equals("Editor_Role"))
-            {
+            if (userValidate.equals("Editor_Role")) {
                 System.out.println("Editor's Home");
 
                 HttpSession session = request.getSession();
@@ -53,27 +52,23 @@ public class Login extends Command {
 
                 return "/WEB-INF/editor";
             }
-            else if(userValidate.equals("User_Role"))
-            {
+            if (userValidate.equals("User_Role")) {
                 System.out.println("User's Home");
 
                 HttpSession session = request.getSession();
-                session.setMaxInactiveInterval(10*60);
+                session.setMaxInactiveInterval(10 * 60);
                 session.setAttribute("User", userName);
                 request.setAttribute("userName", userName);
 
                 return "/WEB-INF/user";
             }
-            else
-            {
-                System.out.println("Error message = "+userValidate);
-                request.setAttribute("errMessage", userValidate);
 
-                return "login";
-            }
-        }
-        catch (Exception e1)
-        {
+            System.out.println("Error message = " + userValidate);
+            request.setAttribute("errMessage", userValidate);
+
+            return "login";
+
+        } catch (Exception e1) {
             e1.printStackTrace();
             return "login";
         }

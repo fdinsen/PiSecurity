@@ -44,7 +44,7 @@ public class CreateUserDaoImpl implements CreateUserDao {
         return generatedPasswordHash;
     }
     
-    public boolean doesUsernameExist(String username, EntityManager em) {
+    public boolean usernameExists(String username, EntityManager em) {
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :un", null);
         query.setParameter("un", username);
         List<User> user = query.getResultList();

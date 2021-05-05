@@ -10,11 +10,15 @@ import Login.LoginBean;
 import Persistence.LoginDaoImpl;
 
 import java.io.IOException;
+import javax.persistence.EntityManager;
+import utils.EMF_Creator;
 
 public class Login extends Command {
 
     @Override
     String execute(HttpServletRequest request, HttpServletResponse response) throws LoginSampleException {
+        EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
+        
         String userName = request.getParameter("username");
         String password = request.getParameter("password");
 
@@ -24,10 +28,10 @@ public class Login extends Command {
         loginBean.setPassword(password);
 
         LoginDaoImpl loginDao = new LoginDaoImpl();
-
+      
         try
         {
-            String userValidate = loginDao.verifyCredentials(loginBean);
+            String userValidate = loginDao.verifyCredentials(loginBean, em);
 
             if(userValidate.equals("Admin_Role"))
             {
@@ -37,7 +41,7 @@ public class Login extends Command {
                 session.setAttribute("Admin", userName); //setting session attribute
                 request.setAttribute("userName", userName);
 
-                return "admin";
+                return "/WEB-INF/admin";
             }
             else if(userValidate.equals("Editor_Role"))
             {
@@ -47,7 +51,7 @@ public class Login extends Command {
                 session.setAttribute("Editor", userName);
                 request.setAttribute("userName", userName);
 
-                return "editor";
+                return "/WEB-INF/editor";
             }
             else if(userValidate.equals("User_Role"))
             {
@@ -58,20 +62,20 @@ public class Login extends Command {
                 session.setAttribute("User", userName);
                 request.setAttribute("userName", userName);
 
-                return "user";
+                return "/WEB-INF/user";
             }
             else
             {
                 System.out.println("Error message = "+userValidate);
                 request.setAttribute("errMessage", userValidate);
 
-                return "index";
+                return "login";
             }
         }
         catch (Exception e1)
         {
             e1.printStackTrace();
-            return "index";
+            return "login";
         }
     } //End of doPost()
 }

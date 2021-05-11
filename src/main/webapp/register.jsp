@@ -11,6 +11,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+        <link rel="stylesheet" href="styles.css">
         <title>Register</title>
     </head>
     <body>
@@ -25,6 +26,10 @@
                             <form name="register" action="FrontController" method="post">
                                 <input type="hidden" name="target" value="register">
 
+                                <div class="pt-1">
+                                    <label class="form-label">Email</label>
+                                    <input type="text" name="email" class="form-control"/>
+                                </div>
                                 <div class="pt-1">
                                     <label class="form-label">Username</label>
                                     <input type="text" name="username" class="form-control"/>

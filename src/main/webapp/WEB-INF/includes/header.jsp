@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="Models.Role"%>
 <nav class="navbar navbar-fixed-top navbar-expand-sm navbar-dark bg-dark ">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.jsp">
@@ -13,9 +15,30 @@
                 </li>-->
             </ul>
             <div class="d-flex">
-                <a class="nav-link active" aria-current="page" href="login.jsp">Sign in</a>
-                <a href="register.jsp"><button class="btn btn-primary">Sign up</button></a>
+                <% if (session.getAttribute("username") == null) { %>
+                    <a class="nav-link active" aria-current="page" href="login.jsp">Sign in</a>
+                    <a href="register.jsp"><button class="btn btn-primary">Sign up</button></a>
+                <% } else { %>
+                    <span class="navbar-text" style="color: white">
+                        <%=session.getAttribute("username")%>
+                    </span>
+                <% }%>
             </div>
         </div>
     </div>
 </nav>
+
+<!--Display unverified email box-->
+<%  String role = (String) request.getSession(false).getAttribute("role");
+    if (role != null && role.equals(Role.unverified.toString())) {
+%>
+    <div class="alert alert-warning" role="alert">
+        You have not verified your email! 
+        <form>
+            <input type="hidden" name="target" value="resend">
+            <input type="submit" class="linkbutton" value="Click here to resend">
+        </form>
+    </div>
+<%
+}//end if
+%>

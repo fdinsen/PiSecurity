@@ -1,6 +1,7 @@
 package PresentationLayer;
 
 import Exceptions.LoginSampleException;
+import Models.Role;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
@@ -11,8 +12,12 @@ public class Logout extends Command {
 
     private static final long serialVersionUID = 1L;
 
+    public Logout(Role[] rolesAllowed) {
+        super(rolesAllowed);
+    }
+
     @Override
-    String execute(HttpServletRequest request, HttpServletResponse response) throws LoginSampleException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws LoginSampleException {
         HttpSession session = request.getSession(false); //Fetch session object
 
         if(session!=null) //If session is not null

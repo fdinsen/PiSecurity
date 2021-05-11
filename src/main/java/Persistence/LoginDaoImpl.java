@@ -1,8 +1,8 @@
 package Persistence;
 
-import Dependencies.MysqlConnection;
-import Persistence.DAO.LoginDao;
+import Persistence.DAO.ILoginDao;
 import Login.LoginBean;
+import Models.Role;
 import Models.User;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -18,38 +18,35 @@ import javax.persistence.TypedQuery;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import utils.EMF_Creator;
 
-public class LoginDaoImpl implements LoginDao {
+public class LoginDaoImpl implements ILoginDao {
 
-    public String verifyCredentials(LoginBean loginBean, EntityManager em) {
-        String userName = loginBean.getUserName();
+    @Override
+    public User verifyCredentials(LoginBean loginBean, EntityManager em) {
+        String email = loginBean.getEmail();
         String password = loginBean.getPassword();
 
         User user = null;
-        String userNameDB = "";
+        String emailDB = "";
         String passwordDB = "";
-        String roleDB = "";
+        Role roleDB = null;
 
         em.getTransaction().begin();
-        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :uname", User.class);
-        query.setParameter("uname", userName);
+        TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class);
+        query.setParameter("email", email);
 
         try {
             user = query.getSingleResult();
-            userNameDB = user.getUsername();
+            emailDB = user.getEmail();
             passwordDB = user.getPassword();
             roleDB = user.getRole();
             
-            if (userName.equals(userNameDB) && validatePassword(password, passwordDB) && roleDB.equals("Admin")) {
-                return "Admin_Role";
-            } else if (userName.equals(userNameDB) && validatePassword(password, passwordDB) && roleDB.equals("Editor")) {
-                return "Editor_Role";
-            } else if (userName.equals(userNameDB) && validatePassword(password, passwordDB) && roleDB.equals("User")) {
-                return "User_Role";
+            if (email.equals(emailDB) && validatePassword(password, passwordDB)) {
+                return user;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "Invalid user credentials";
+        return null;
     }
     
     private boolean validatePassword(String originalPassword, String storedPassword) {

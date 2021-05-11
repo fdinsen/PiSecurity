@@ -5,8 +5,9 @@
  */
 package Persistence;
 
+import Models.Role;
 import Models.User;
-import Persistence.DAO.CreateUserDao;
+import Persistence.DAO.ICreateUserDao;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -26,14 +27,15 @@ import utils.EMF_Creator;
  *
  * @author gamma
  */
-public class CreateUserDaoImpl implements CreateUserDao {
+public class CreateUserDaoImpl implements ICreateUserDao {
 
-    public User createUser(String username, String password, EntityManager em) {
+    public User createUser(String username, String email, String password, EntityManager em) {
         em.getTransaction().begin();
         User user = new User();
         user.setUsername(username);
+        user.setEmail(email);
         user.setPassword(generatePasswordHash(password));
-        user.setRole("User");
+        user.setRole(Role.unverified);
         em.persist(user);
         em.getTransaction().commit();
         return user;

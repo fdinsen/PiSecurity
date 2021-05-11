@@ -3,13 +3,9 @@ package Persistence;
 import Exceptions.DBErrorException;
 import Exceptions.UserNotFoundException;
 import Models.User;
-import Persistence.DAO.CreateUserDao;
 import Persistence.DAO.UserDao;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import java.util.List;
 
 /**
  *
@@ -26,12 +22,12 @@ public class UserDaoImpl implements UserDao {
             query.setParameter("uname", username);
             user = query.getSingleResult();
         } catch (Exception e) {
-            throw new DBErrorException("Could not create Category as something went wrong while finding your user in DB.");
+            throw new DBErrorException("Something went wrong while finding user");
         }
 
         //Does not exist
         if(user == null){
-            throw new UserNotFoundException("Could not create Category as your user could not be found in DB");
+            throw new UserNotFoundException("User could not be found in DB");
         }
 
         return user;

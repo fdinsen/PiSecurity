@@ -2,7 +2,6 @@ package PresentationLayer;
 
 import Exceptions.LoginSampleException;
 import Models.Role;
-import Models.User;
 import java.util.Arrays;
 import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
@@ -16,11 +15,15 @@ public abstract class Command {
 
     private static void initCommands() {
         commands = new HashMap<>();
-        commands.put("login", new Login());
-        commands.put("logout", new Logout());
-        commands.put("register", new Register());
-        commands.put("createCategory", new CreateCategory());
+        commands.put("login", new Login(new Role[]{}));
+        commands.put("logout", new Logout(new Role[]{}));
         commands.put("register", new Register(new Role[]{}));
+        commands.put("resend", new ResendActivationEmail(new Role[]{Role.unverified}));
+        commands.put("createCategory", new CreateCategory(new Role[]{}));
+        commands.put("viewCategories", new ViewCategories(new Role[]{}));
+        commands.put("editCategory", new EditCategory(new Role[]{}));
+        commands.put("deleteCategory", new DeleteCategory(new Role[]{}));
+        commands.put("createBoard", new CreateBoard(new Role[]{}));
     }
 
     public static Command from( HttpServletRequest request ) {

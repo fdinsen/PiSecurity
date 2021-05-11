@@ -1,16 +1,15 @@
 package Persistence;
 
 import Exceptions.DBErrorException;
-import Exceptions.UserNotFoundException;
 import Models.Category;
 import Models.User;
-import Persistence.DAO.CategoryDao;
+import Persistence.DAO.ICategoryDao;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
-public class CategoryDaoImpl implements CategoryDao {
+public class CategoryDaoImpl implements ICategoryDao {
 
     @Override
     public Category createCategory(String name, User user, EntityManager em) throws DBErrorException {
@@ -40,7 +39,6 @@ public class CategoryDaoImpl implements CategoryDao {
 
     @Override
     public Category getCategoryFromName(String catName,EntityManager em) throws DBErrorException {
-        //Check if already exist
         Category category = null;
 
         //find category in db
@@ -55,8 +53,24 @@ public class CategoryDaoImpl implements CategoryDao {
         catch (Exception e) {
             throw new DBErrorException("Something went wrong while getting category from category name");
         }
+    }
 
+    @Override
+    public Category getCategoryFromID(int catId, EntityManager em) throws DBErrorException {
+        Category category = null;
 
+        //find category in db
+        try {
+            TypedQuery<Category> query = em.createQuery("SELECT c FROM Category c WHERE c.id = :catId", Category.class);
+            query.setParameter("catId", catId);
+            category = query.getSingleResult();
+            return  category;
+        } catch (NoResultException nre){
+            return null;
+        }
+        catch (Exception e) {
+            throw new DBErrorException("Something went wrong while getting category from id");
+        }
     }
 
     @Override
@@ -71,12 +85,63 @@ public class CategoryDaoImpl implements CategoryDao {
     }
 
     @Override
-    public boolean deleteCategory(int catId, EntityManager em) {
-        return false;
+    public List<Category> getCategoriesWithBoardsAndCount(EntityManager em) throws DBErrorException {
+        try {
+            TypedQuery<Category> query = em.createQuery("SELECT c FROM Category c LEFT JOIN c.boards b", Category.class);
+            List<Category> categories = query.getResultList();
+            return  categories;
+        } catch (Exception e) {
+            throw new DBErrorException("Something went wrong while getting all categories");
+        }
     }
 
     @Override
-    public Category editCategory(int catId, String name, EntityManager em) {
-        return null;
+    public boolean deleteCategory(int catId, EntityManager em) throws DBErrorException {
+        Category category = null;
+        try{
+            category = getCategoryFromID(catId, em);
+        }catch (Exception e){
+            throw new DBErrorException("Something went wrong while checking if category exist");
+        }
+
+        if(category == null){
+            throw new DBErrorException("The category you are trying to delete, does not exist");
+        }
+
+        try {
+            //Delete
+            em.getTransaction().begin();
+            em.remove(category);
+            em.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            throw new DBErrorException("Something went wrong while deleting category");
+        }
+
+    }
+
+    @Override
+    public Category editCategory(int catId, String name,User user, EntityManager em) throws DBErrorException {
+        Category category = null;
+        try{
+            category = getCategoryFromID(catId, em);
+        }catch (Exception e){
+            throw new DBErrorException("Something went wrong while checking if category exist");
+        }
+
+        if(category == null){
+            throw new DBErrorException("Category does not exist");
+        }
+
+        try {
+            em.getTransaction().begin();
+            category.setName(name);
+            category.setUpdatedBy(user);
+            em.persist(category);
+            em.getTransaction().commit();
+            return category;
+        } catch (Exception e) {
+            throw new DBErrorException("Something went wrong while editing category");
+        }
     }
 }

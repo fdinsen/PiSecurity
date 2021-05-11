@@ -11,14 +11,18 @@ import java.util.List;
  *
  * @author Oliver
  */
-public interface CategoryDao {
+public interface ICategoryDao {
     public Category createCategory(String name, User user, EntityManager em) throws DBErrorException, UserNotFoundException;
 
     public Category getCategoryFromName(String catName,EntityManager em) throws DBErrorException;
 
+    public Category getCategoryFromID(int catId,EntityManager em) throws DBErrorException;
+
     public List<Category> getAllCategories(EntityManager em) throws DBErrorException;
 
-    public  boolean deleteCategory(int catId,EntityManager em);
+    public List<Category> getCategoriesWithBoardsAndCount(EntityManager em) throws DBErrorException;
 
-    public  Category editCategory(int catId, String name,EntityManager em);
+    public  boolean deleteCategory(int catId,EntityManager em) throws DBErrorException;
+
+    public  Category editCategory(int catId, String name,User user,EntityManager em) throws DBErrorException;
 }

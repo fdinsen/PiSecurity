@@ -3,6 +3,7 @@ package PresentationLayer;
 import Exceptions.DBErrorException;
 import Exceptions.LoginSampleException;
 import Exceptions.UserNotFoundException;
+import Models.Role;
 import Models.User;
 import Persistence.CategoryDaoImpl;
 import Persistence.UserDaoImpl;
@@ -15,10 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class CreateCategory extends Command {
+    public CreateCategory(Role[] rolesAllowed) {
+        super(rolesAllowed);
+    }
 
-    private static final long serialVersionUID = 1L;
-
-    String execute(HttpServletRequest request, HttpServletResponse response) {
+    @Override
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
 
         //Escapes HTML tags
@@ -35,12 +38,13 @@ public class CreateCategory extends Command {
         User user = null;
         try{
             HttpSession session = request.getSession();
-            String userName = (String)session.getAttribute("userName");
+            String userName = (String)session.getAttribute("username");
 
             UserDaoImpl userDaoImpl  = new UserDaoImpl();
             user = userDaoImpl.getUserFromUsername(userName, em);
         }catch (DBErrorException | UserNotFoundException e) {
             request.setAttribute("errMsg", e.getMessage());
+            return "createCategory";
         }catch (Exception e){
             request.setAttribute("errMsg", "Something went wrong while creating category");
             return "createCategory";
@@ -54,10 +58,12 @@ public class CreateCategory extends Command {
 
         }catch (DBErrorException e) {
             request.setAttribute("errMsg", e.getMessage());
+            return "createCategory";
         } catch (Exception e){
             request.setAttribute("errMsg", "Something went wrong while creating category");
+            return "createCategory";
         }
 
-        return "createCategory";
+        return "viewCategories";
     }
 }

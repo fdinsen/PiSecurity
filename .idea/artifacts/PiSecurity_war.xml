@@ -7,7 +7,7 @@
         <packaging>war</packaging>
       </options>
     </properties>
-    <root id="archive" name="PiSecuirty.war">
+    <root id="archive" name="PiSecurity-1.0-SNAPSHOT.war">
       <element id="artifact" artifact-name="PiSecurity:war exploded" />
     </root>
   </artifact>

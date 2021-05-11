@@ -3,6 +3,7 @@ package Models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "category")
@@ -17,11 +18,14 @@ public class Category implements Serializable{
     @Column(name = "name", unique = true, nullable = false)
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="category", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private List<Board> boards;
+
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(referencedColumnName = "u_id")
     private User createdBy;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.DETACH)
     @JoinColumn(referencedColumnName = "u_id")
     private User updatedBy;
 
@@ -57,6 +61,14 @@ public class Category implements Serializable{
         this.name = name;
     }
 
+    public List<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(List<Board> boards) {
+        this.boards = boards;
+    }
+
     public User getCreatedBy() {
         return createdBy;
     }
@@ -77,7 +89,15 @@ public class Category implements Serializable{
         return createdAt;
     }
 
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Date getUpdatedAt() {
         return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

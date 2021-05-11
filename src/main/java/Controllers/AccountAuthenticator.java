@@ -2,8 +2,6 @@ package Controllers;
 
 import Persistence.AuthenticateUserDaoImpl;
 import Persistence.DAO.IAuthenticateUserDao;
-import Service.ILoginService;
-import Service.LoginService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import javax.persistence.EntityManager;
-import javax.ws.rs.core.MultivaluedMap;
 import utils.EMF_Creator;
 
 

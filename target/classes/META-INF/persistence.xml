@@ -3,8 +3,13 @@
   <!-- DO NOT RENAME THE PERSISTENCE UNIT -->
   <persistence-unit name="pu" transaction-type="RESOURCE_LOCAL">
     <!--    <class>entities.RenameMe</class>-->
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <class>Models.User</class>
+    <class>Models.Board</class>
+    <class>Models.Category</class>
+    <class>Models.Post</class>
+    <class>Models.Thread</class>
+    <class>Models.Role</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <!-- DO NOT remove the line below. It's not set by the  entityUtils.EMF_Creator -->

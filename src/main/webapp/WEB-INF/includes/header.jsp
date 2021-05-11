@@ -16,7 +16,10 @@
                     {
                 %>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="createCategory.jsp">Create Category</a>
+                    <a class="nav-link" aria-current="page" href="viewCategories.jsp">Categories</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="createBoard.jsp">Create Board</a>
                 </li>
                 <%} %>
 

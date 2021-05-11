@@ -1,5 +1,6 @@
 package utils;
 
+import Models.Role;
 import Models.User;
 
 import javax.persistence.*;
@@ -13,10 +14,14 @@ public class TestSystem {
         addUser("Peter", "peter123");
         addUser("Karl", "karl123");
         getUser("Peter");
+        
+        String test = JWTHandling.createJWT("frederik");
+        String username = JWTHandling.readJWT(test);
+        System.out.println(test);
+        System.out.println(username);
 
         EMF.close();
     }
-
 
     public static void addUser(String username, String pw) {
         EntityManager em = EMF.createEntityManager();
@@ -27,7 +32,7 @@ public class TestSystem {
             User user = new User();
             user.setUsername(username);
             user.setPassword(BCrypt.hashpw(pw, BCrypt.gensalt(12)));
-            user.setRole("User");
+            user.setRole(Role.user);
 
             em.persist(user);
             transaction.commit();

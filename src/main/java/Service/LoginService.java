@@ -1,11 +1,11 @@
 package Service;
 
-import Persistence.DAO.LoginDao;
+import Persistence.DAO.ILoginDao;
 import Persistence.LoginDaoImpl;
 
 public class LoginService implements ILoginService {
 
-    private LoginDao ldi;
+    private ILoginDao ldi;
 
     public LoginService() {
         ldi = new LoginDaoImpl();

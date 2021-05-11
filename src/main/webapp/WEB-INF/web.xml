@@ -11,7 +11,12 @@
     <!-- login sevles -->
     <servlet>
         <servlet-name>FrontController</servlet-name>
-        <servlet-class>PresentationLayer.FrontController</servlet-class>
+        <servlet-class>Controllers.FrontController</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>Authenticator</servlet-name>
+        <servlet-class>Controllers.AccountAuthenticator</servlet-class>
     </servlet>
 
     <servlet-mapping>

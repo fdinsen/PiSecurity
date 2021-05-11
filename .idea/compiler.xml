@@ -6,13 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="ValgfagBoilerPlateSecurity" />
         <module name="PiSecurity" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="PiSecurity" target="1.8" />
-      <module name="ValgfagBoilerPlateSecurity" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

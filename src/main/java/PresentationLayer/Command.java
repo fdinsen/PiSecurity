@@ -16,10 +16,11 @@ public abstract class Command {
 
     private static void initCommands() {
         commands = new HashMap<>();
-        commands.put("login", new Login(new Role[]{}));
-        commands.put("logout", new Logout(new Role[]{}));
+        commands.put("login", new Login());
+        commands.put("logout", new Logout());
+        commands.put("register", new Register());
+        commands.put("createCategory", new CreateCategory());
         commands.put("register", new Register(new Role[]{}));
-        commands.put("resend", new ResendActivationEmail(new Role[]{Role.unverified}));
     }
 
     public static Command from( HttpServletRequest request ) {

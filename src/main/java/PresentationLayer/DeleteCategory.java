@@ -1,7 +1,9 @@
 package PresentationLayer;
 
 import Exceptions.DBErrorException;
+import Exceptions.InvalidInputException;
 import Exceptions.UserNotFoundException;
+import Models.Category;
 import Models.Role;
 import Models.User;
 import Persistence.CategoryDaoImpl;
@@ -14,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import static utils.ValidationUtils.categoryIdStringValidation;
+
 public class DeleteCategory extends Command {
     public DeleteCategory(Role[] rolesAllowed) {
         super(rolesAllowed);
@@ -25,23 +29,24 @@ public class DeleteCategory extends Command {
 
 
         //Escapes HTML
-        int catId;
-        try{
-            catId = Integer.parseInt(StringEscapeUtils.escapeHtml4(request.getParameter("catId")));
+        String catIdString = StringEscapeUtils.escapeHtml4(request.getParameter("catId"));
 
-        }catch (NumberFormatException e){
-            request.setAttribute("errMsg", "Category ID, has to be a integer");
+        //categoryId Validation
+        Category category;
+        try{
+            category = categoryIdStringValidation(catIdString, em);
+        }catch(InvalidInputException e){
+            request.setAttribute("errMsg", e.getMessage());
             return "viewCategories";
-        } catch (Exception e){
-            request.setAttribute("errMsg", "Something went wrong while trying to delete category");
+        }catch(Exception e){
+            request.setAttribute("errMsg", "Something went wrong while deleting category");
             return "viewCategories";
         }
 
         //Delete
         try{
             CategoryDaoImpl categoryDaoImpl = new CategoryDaoImpl();
-            categoryDaoImpl.deleteCategory(catId, em);
-
+            categoryDaoImpl.deleteCategory(category, em);
             request.setAttribute("message", "Category deleted");
         }catch (DBErrorException e) {
             request.setAttribute("errMsg", e.getMessage());

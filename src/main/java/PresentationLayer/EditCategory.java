@@ -1,7 +1,9 @@
 package PresentationLayer;
 
 import Exceptions.DBErrorException;
+import Exceptions.InvalidInputException;
 import Exceptions.UserNotFoundException;
+import Models.Category;
 import Models.Role;
 import Models.User;
 import Persistence.CategoryDaoImpl;
@@ -14,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import static utils.ValidationUtils.categoryIdStringValidation;
+import static utils.ValidationUtils.categoryNameValidation;
+
 public class EditCategory extends Command {
     public EditCategory(Role[] rolesAllowed) {
         super(rolesAllowed);
@@ -23,36 +28,43 @@ public class EditCategory extends Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
 
-
         //Escapes HTML
         int catId;
-        String categoryName;
+        String beginEdit = StringEscapeUtils.escapeHtml4(request.getParameter("beginEdit"));
+        String catIdString = StringEscapeUtils.escapeHtml4(request.getParameter("catId"));
+        String categoryName = StringEscapeUtils.escapeHtml4(request.getParameter("name"));
+
+
+        //Setup for errors
+        request.setAttribute("editing", true);
+        request.setAttribute("editCatId", catIdString);
+        request.setAttribute("categoryName", categoryName);
+
+        //categoryId Validation
+        Category category;
         try{
-            String beginEdit = StringEscapeUtils.escapeHtml4(request.getParameter("beginEdit"));
-            catId = Integer.parseInt(StringEscapeUtils.escapeHtml4(request.getParameter("catId")));
-            categoryName = StringEscapeUtils.escapeHtml4(request.getParameter("name"));
-
-            //Setup for errors
-            request.setAttribute("editing", true);
-            request.setAttribute("editCatId", catId);
-            request.setAttribute("categoryName", categoryName);
-
-            if(beginEdit != null && beginEdit.equals("1")) {
-                return "viewCategories";
-            }
-
-        }catch (NumberFormatException e){
-            request.setAttribute("errMsg", "Category ID, has to be a integer");
-            return "viewCategories";
-        } catch (Exception e){
+            category = categoryIdStringValidation(catIdString, em);
+        }catch(InvalidInputException e){
+            request.setAttribute("errMsg", e.getMessage());
+            return "createCategory";
+        }catch(Exception e){
             request.setAttribute("errMsg", "Something went wrong while updating category");
-            return "viewCategories";
+            return "createCategory";
         }
 
-
         //Category name validation
-        if (categoryName == null || categoryName.length() < 4) {
-            request.setAttribute("errMsg", "Category name must be at least 4 chars");
+        try{
+            categoryNameValidation(categoryName);
+        }catch(InvalidInputException e){
+            request.setAttribute("errMsg", e.getMessage());
+            return "createCategory";
+        }catch(Exception e){
+            request.setAttribute("errMsg", "Something went wrong while updating category");
+            return "createCategory";
+        }
+
+        //First click on edit
+        if(beginEdit != null && beginEdit.equals("1")) {
             return "viewCategories";
         }
 
@@ -75,7 +87,7 @@ public class EditCategory extends Command {
         //Create
         try{
             CategoryDaoImpl categoryDaoImpl = new CategoryDaoImpl();
-            categoryDaoImpl.editCategory(catId,categoryName, user, em);
+            categoryDaoImpl.editCategory(category,categoryName, user, em);
 
             request.setAttribute("editing", true);
             request.setAttribute("editCatId", null);

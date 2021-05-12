@@ -96,18 +96,7 @@ public class CategoryDaoImpl implements ICategoryDao {
     }
 
     @Override
-    public boolean deleteCategory(int catId, EntityManager em) throws DBErrorException {
-        Category category = null;
-        try{
-            category = getCategoryFromID(catId, em);
-        }catch (Exception e){
-            throw new DBErrorException("Something went wrong while checking if category exist");
-        }
-
-        if(category == null){
-            throw new DBErrorException("The category you are trying to delete, does not exist");
-        }
-
+    public boolean deleteCategory(Category category, EntityManager em) throws DBErrorException {
         try {
             //Delete
             em.getTransaction().begin();
@@ -121,18 +110,7 @@ public class CategoryDaoImpl implements ICategoryDao {
     }
 
     @Override
-    public Category editCategory(int catId, String name,User user, EntityManager em) throws DBErrorException {
-        Category category = null;
-        try{
-            category = getCategoryFromID(catId, em);
-        }catch (Exception e){
-            throw new DBErrorException("Something went wrong while checking if category exist");
-        }
-
-        if(category == null){
-            throw new DBErrorException("Category does not exist");
-        }
-
+    public Category editCategory(Category category, String name,User user, EntityManager em) throws DBErrorException {
         try {
             em.getTransaction().begin();
             category.setName(name);

@@ -1,12 +1,15 @@
 package PresentationLayer;
 
 import Exceptions.DBErrorException;
+import Exceptions.InvalidInputException;
 import Exceptions.LoginSampleException;
 import Exceptions.UserNotFoundException;
 import Models.Role;
 import Models.User;
 import Persistence.CategoryDaoImpl;
 import Persistence.UserDaoImpl;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.EMF_Creator;
 
@@ -14,6 +17,8 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import static utils.ValidationUtils.categoryNameValidation;
 
 public class CreateCategory extends Command {
     public CreateCategory(Role[] rolesAllowed) {
@@ -28,11 +33,15 @@ public class CreateCategory extends Command {
         String categoryName = StringEscapeUtils.escapeHtml4(request.getParameter("name"));
 
         //Category name validation
-        if (categoryName == null || categoryName.length() < 4) {
-            request.setAttribute("errMsg", "Category name must be at least 4 chars");
+        try{
+            categoryNameValidation(categoryName);
+        }catch(InvalidInputException e){
+            request.setAttribute("errMsg", e.getMessage());
+            return "createCategory";
+        }catch(Exception e){
+            request.setAttribute("errMsg", "Something went wrong while creating category");
             return "createCategory";
         }
-
 
         //Get user
         User user = null;

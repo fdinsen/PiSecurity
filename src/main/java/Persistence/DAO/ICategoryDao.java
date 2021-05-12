@@ -1,7 +1,6 @@
 package Persistence.DAO;
 import Exceptions.DBErrorException;
 import Exceptions.UserNotFoundException;
-import Login.LoginBean;
 import Models.Category;
 import Models.User;
 import javax.persistence.EntityManager;
@@ -22,7 +21,7 @@ public interface ICategoryDao {
 
     public List<Category> getCategoriesWithBoardsAndCount(EntityManager em) throws DBErrorException;
 
-    public  boolean deleteCategory(int catId,EntityManager em) throws DBErrorException;
+    public  boolean deleteCategory(Category category,EntityManager em) throws DBErrorException;
 
-    public  Category editCategory(int catId, String name,User user,EntityManager em) throws DBErrorException;
+    public  Category editCategory(Category category, String name,User user,EntityManager em) throws DBErrorException;
 }

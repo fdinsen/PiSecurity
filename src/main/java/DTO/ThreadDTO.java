@@ -25,7 +25,9 @@ public class ThreadDTO {
         this.text = thread.getText();
         this.posts = postToPostDTO(thread.getPosts(), this);
         this.createdBy = new UserDTO(thread.getCreatedBy());
-        this.updatedBy = new UserDTO(thread.getCreatedBy());
+        if(thread.getUpdatedBy() != null) {
+            this.updatedBy = new UserDTO(thread.getUpdatedBy());
+        }
         this.createdAt = thread.getCreatedAt();
         this.updatedAt = thread.getUpdatedAt();
     }
@@ -37,7 +39,9 @@ public class ThreadDTO {
         this.board = boardDTO;
         this.posts = postToPostDTO(thread.getPosts(), this);
         this.createdBy = new UserDTO(thread.getCreatedBy());
-        this.updatedBy = new UserDTO(thread.getCreatedBy());
+        if(thread.getUpdatedBy() != null) {
+            this.updatedBy = new UserDTO(thread.getUpdatedBy());
+        }
         this.createdAt = board.getCreatedAt();
         this.updatedAt = board.getUpdatedAt();
     }

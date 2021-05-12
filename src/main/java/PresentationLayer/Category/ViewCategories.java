@@ -1,5 +1,6 @@
 package PresentationLayer.Category;
 
+import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
 import Models.Category;
 import Models.Role;
@@ -24,7 +25,7 @@ public class ViewCategories extends Command {
         //Get categories
         try{
             CategoryFacade categoryFacade  = new CategoryFacade();
-            List<Category> categories = categoryFacade.getAllCategories();
+            List<CategoryDTO> categories = categoryFacade.getAllCategories();
             request.setAttribute("categories", categories);
         }catch (DBErrorException e) {
             request.setAttribute("errMsg", e.getMessage());

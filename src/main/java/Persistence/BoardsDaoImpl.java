@@ -1,5 +1,7 @@
 package Persistence;
 
+import DTO.BoardDTO;
+import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
 import Exceptions.UserNotFoundException;
 import Models.Board;
@@ -16,34 +18,46 @@ public class BoardsDaoImpl implements IBoardDao {
 
 
     @Override
-    public void createBoard(String name, String description, Category category, User createdBy, EntityManager em) throws DBErrorException, UserNotFoundException {
-        Board board = null;
+    public void createBoard(String name, String description, CategoryDTO categoryDTO, User createdBy, EntityManager em) throws DBErrorException, UserNotFoundException {
+        BoardDTO boardDTO = null;
         try{
-            board = getBoardFromName(name, em);
+            boardDTO = getBoardFromName(name, em);
         }catch (Exception e){
             throw new DBErrorException("Something went wrong while checking if board already exist");
+        }finally {
+            em.close();
         }
 
-        if(board != null){
+        if(boardDTO != null){
+            em.close();
             throw new DBErrorException("Category already exist");
         }
 
         try {
             em.getTransaction().begin();
-            board = new Board();
+            Board board = new Board();
             board.setName(name);
             board.setDescription(description);
+
+            //Get category
+            CategoryDaoImpl categoryDao = new CategoryDaoImpl();
+            Category category = categoryDao.getCategoryFromID(categoryDTO.getId(),false, em);
             board.setCategory(category);
+
             board.setCreatedBy(createdBy);
+
+            //check if detached
             em.persist(board);
             em.getTransaction().commit();
         } catch (Exception e) {
             throw new DBErrorException("Something went wrong while creating board in DB");
+        }finally {
+            em.close();
         }
     }
 
     @Override
-    public Board getBoardFromName(String name, EntityManager em) throws DBErrorException {
+    public BoardDTO getBoardFromName(String name, EntityManager em) throws DBErrorException {
         //Check if already exist
         Board board = null;
 
@@ -52,17 +66,21 @@ public class BoardsDaoImpl implements IBoardDao {
             TypedQuery<Board> query = em.createQuery("SELECT b FROM Board b WHERE b.name = :boardName", Board.class);
             query.setParameter("boardName", name);
             board = query.getSingleResult();
-            return  board;
+
+            BoardDTO boardDTO = new BoardDTO(board);
+
+            return boardDTO;
         } catch (NoResultException nre){
             return null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new DBErrorException("Something went wrong while getting board from board name");
+        } finally {
+            em.close();
         }
     }
 
     @Override
-    public Board getBoardFromID(int boardId, EntityManager em) throws DBErrorException {
+    public BoardDTO getBoardFromID(int boardId, EntityManager em) throws DBErrorException {
         //Check if already exist
         Board board = null;
 
@@ -71,17 +89,22 @@ public class BoardsDaoImpl implements IBoardDao {
             TypedQuery<Board> query = em.createQuery("SELECT b FROM Board b WHERE b.id = :boardId", Board.class);
             query.setParameter("boardId", boardId);
             board = query.getSingleResult();
-            return  board;
+
+            BoardDTO boardDTO = new BoardDTO(board);
+
+            return boardDTO;
         } catch (NoResultException nre){
             return null;
         }
         catch (Exception e) {
             throw new DBErrorException("Something went wrong while getting board from board id");
+        }finally {
+            em.close();
         }
     }
 
     @Override
-    public List<Board> getBoardsForCategory(Category category, EntityManager em) throws DBErrorException {
+    public List<BoardDTO> getBoardsForCategory(CategoryDTO categoryDTO, EntityManager em) throws DBErrorException {
         return null;
     }
 }

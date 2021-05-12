@@ -1,5 +1,7 @@
 package Facades;
 
+import DTO.BoardDTO;
+import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
 import Exceptions.InvalidInputException;
 import Exceptions.UserNotFoundException;
@@ -32,7 +34,7 @@ public class BoardFacade implements IBoardFacade {
         createdByUsername = StringEscapeUtils.escapeHtml4(createdByUsername);
 
         //categoryId Validation
-        Category category = categoryIdStringValidation(catIdString);
+        CategoryDTO category = categoryIdStringValidation(catIdString);
 
         //Board name validation
         boardNameValidation(boardName);
@@ -55,13 +57,15 @@ public class BoardFacade implements IBoardFacade {
     }
 
     @Override
-    public Board getBoardFromID(int boardId) throws DBErrorException {
+    public BoardDTO getBoardFromID(int boardId) throws DBErrorException {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
 
         //Get category
         BoardsDaoImpl boardsDaoImpl  = new BoardsDaoImpl();
-        Board board = boardsDaoImpl.getBoardFromID(boardId, em);
-        return board;
+        BoardDTO boardDTO = boardsDaoImpl.getBoardFromID(boardId, em);
+
+
+        return boardDTO;
     }
 
     @Override

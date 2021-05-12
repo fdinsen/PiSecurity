@@ -1,5 +1,6 @@
 package Facades;
 
+import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
 import Exceptions.InvalidInputException;
 import Exceptions.UserNotFoundException;
@@ -43,26 +44,28 @@ public class CategoryFacade implements ICategoryFacade {
     }
 
     @Override
-    public Category getCategoryFromName(String catName) throws DBErrorException {
+    public CategoryDTO getCategoryFromName(String catName) throws DBErrorException {
         return null;
     }
 
     @Override
-    public Category getCategoryFromID(int catId) throws DBErrorException {
+    public CategoryDTO getCategoryFromID(int catId) throws DBErrorException {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
 
         //Get category
         CategoryDaoImpl categoryDaoImpl  = new CategoryDaoImpl();
-        Category category = categoryDaoImpl.getCategoryFromID(catId, em);
-        return category;
+        CategoryDTO categoryDTO = categoryDaoImpl.getCategoryDTOFromID(catId, em);
+
+        return categoryDTO;
     }
 
     @Override
-    public List<Category> getAllCategories() throws DBErrorException {
+    public List<CategoryDTO> getAllCategories() throws DBErrorException {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
 
         //Get categories
         CategoryDaoImpl categoryDaoImpl  = new CategoryDaoImpl();
+
         return categoryDaoImpl.getAllCategories(em);
     }
 
@@ -74,11 +77,11 @@ public class CategoryFacade implements ICategoryFacade {
         catIdString = StringEscapeUtils.escapeHtml4(catIdString);
 
         //categoryId Validation
-        Category category = categoryIdStringValidation(catIdString);
+        CategoryDTO categoryDTO = categoryIdStringValidation(catIdString);
 
         //Delete
         CategoryDaoImpl categoryDaoImpl = new CategoryDaoImpl();
-        categoryDaoImpl.deleteCategory(category, em);
+        categoryDaoImpl.deleteCategory(categoryDTO, em);
     }
 
     @Override
@@ -92,7 +95,7 @@ public class CategoryFacade implements ICategoryFacade {
         username = StringEscapeUtils.escapeHtml4(username);
 
         //categoryId Validation
-        Category category = categoryIdStringValidation(catIdString);
+        CategoryDTO categoryDTO = categoryIdStringValidation(catIdString);
 
         //Category name validation
         categoryNameValidation(categoryName);
@@ -108,7 +111,7 @@ public class CategoryFacade implements ICategoryFacade {
 
         //Create
         CategoryDaoImpl categoryDaoImpl = new CategoryDaoImpl();
-        categoryDaoImpl.editCategory(category,categoryName, user, em);
+        categoryDaoImpl.editCategory(categoryDTO,categoryName, user, em);
 
         return false;
     }

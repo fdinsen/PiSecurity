@@ -1,5 +1,6 @@
 package Facades.Interfaces;
 
+import DTO.BoardDTO;
 import Exceptions.DBErrorException;
 import Exceptions.InvalidInputException;
 import Exceptions.UserNotFoundException;
@@ -11,7 +12,7 @@ public interface IBoardFacade {
 
     public Board getBoardFromName(String name) throws DBErrorException;
 
-    public Board getBoardFromID(int boardId) throws DBErrorException;
+    public BoardDTO getBoardFromID(int boardId) throws DBErrorException;
 
     public List<Board> getBoardsForCategory(String catId) throws DBErrorException;
 }

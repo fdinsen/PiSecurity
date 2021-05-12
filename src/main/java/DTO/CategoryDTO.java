@@ -29,7 +29,9 @@ public class CategoryDTO {
         }
         this.boards = boardDTOS;
         this.createdBy = new UserDTO(category.getCreatedBy());
-        this.updatedBy = new UserDTO(category.getUpdatedBy());
+        if(category.getUpdatedBy() != null) {
+            this.updatedBy = new UserDTO(category.getUpdatedBy());
+        }
         this.createdAt = category.getCreatedAt();
         this.updatedAt = category.getUpdatedAt();
     }

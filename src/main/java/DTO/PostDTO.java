@@ -18,7 +18,9 @@ public class PostDTO {
         this.text = post.getText();
         this.thread = threadDTO;
         this.createdBy = new UserDTO(post.getCreatedBy());
-        this.updatedBy = new UserDTO(post.getCreatedBy());
+        if(post.getUpdatedBy() != null) {
+            this.updatedBy = new UserDTO(post.getUpdatedBy());
+        }
         this.createdAt = post.getCreatedAt();
         this.updatedAt = post.getUpdatedAt();
     }

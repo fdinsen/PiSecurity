@@ -7,71 +7,80 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Login.LoginBean;
+import Models.Role;
+import Models.User;
 import Persistence.LoginDaoImpl;
 
 import java.io.IOException;
+import javax.persistence.EntityManager;
+import utils.EMF_Creator;
+import org.apache.commons.text.StringEscapeUtils;
+import utils.Policies;
+import utils.ValidationUtils;
 
 public class Login extends Command {
 
+    public Login(Role[] rolesAllowed) {
+        super(rolesAllowed);
+    }
+
     @Override
-    String execute(HttpServletRequest request, HttpServletResponse response) throws LoginSampleException {
-        String userName = request.getParameter("username");
-        String password = request.getParameter("password");
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws LoginSampleException {
+        EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
+
+        //Escapes HTML tags
+        String email = ValidationUtils.escapeUnsafeCharacters(request.getParameter("email"));
+        String password = ValidationUtils.escapeUnsafeCharacters(request.getParameter("password"));
 
         LoginBean loginBean = new LoginBean();
 
-        loginBean.setUserName(userName);
+        loginBean.setEmail(email);
         loginBean.setPassword(password);
 
         LoginDaoImpl loginDao = new LoginDaoImpl();
 
-        try
-        {
-            String userValidate = loginDao.verifyCredentials(loginBean);
+        try {
+            User validatedUser = loginDao.verifyCredentials(loginBean, em);
 
-            if(userValidate.equals("Admin_Role"))
-            {
-                System.out.println("Admin's Home");
+            HttpSession session = request.getSession(); //Creating a session
+            session.setAttribute("role", validatedUser.getRole().toString());
+            session.setAttribute("username", validatedUser.getUsername());
+            request.setAttribute("userName", validatedUser.getUsername());
 
-                HttpSession session = request.getSession(); //Creating a session
-                session.setAttribute("Admin", userName); //setting session attribute
-                request.setAttribute("userName", userName);
+            //TODO remove following if statements when deleting admin/editor/user test pages
+            if (validatedUser.getRole().equals(Role.admin)) {
 
-                return "admin";
+                session.setAttribute("Admin", validatedUser.getUsername()); //setting session attribute
+
+                return "/WEB-INF/admin";
             }
-            else if(userValidate.equals("Editor_Role"))
-            {
-                System.out.println("Editor's Home");
+            if (validatedUser.getRole().equals(Role.moderator)) {
 
-                HttpSession session = request.getSession();
-                session.setAttribute("Editor", userName);
-                request.setAttribute("userName", userName);
+                session.setAttribute("Editor", validatedUser.getUsername());
 
-                return "editor";
+                return "/WEB-INF/editor";
             }
-            else if(userValidate.equals("User_Role"))
-            {
-                System.out.println("User's Home");
+            if (validatedUser.getRole().equals(Role.user)) {
 
-                HttpSession session = request.getSession();
-                session.setMaxInactiveInterval(10*60);
-                session.setAttribute("User", userName);
-                request.setAttribute("userName", userName);
+                session.setMaxInactiveInterval(10 * 60);
+                session.setAttribute("User", validatedUser.getUsername());
 
-                return "user";
+                return "/WEB-INF/user";
             }
-            else
-            {
-                System.out.println("Error message = "+userValidate);
-                request.setAttribute("errMessage", userValidate);
-
-                return "index";
+            if(validatedUser.getRole().equals(Role.unverified)) {
+                session.setAttribute("User", validatedUser.getUsername());
+                return "/WEB-INF/user";
             }
-        }
-        catch (Exception e1)
-        {
+
+            System.out.println("Error message = " + "Username or password is incorrect.");
+            request.setAttribute("errMessage", "Username or password is incorrect.");
+
+            return "login";
+
+        } catch (NullPointerException e1) {
             e1.printStackTrace();
-            return "index";
+            request.setAttribute("errMessage", "Username or password is incorrect.");
+            return "login";
         }
-    } //End of doPost()
+    }
 }

@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package Persistence.DAO;
-import Models.User;
+import DTO.UserDTO;
 import javax.persistence.EntityManager;
 
 /**
@@ -12,5 +12,6 @@ import javax.persistence.EntityManager;
  * @author gamma
  */
 public interface ICreateUserDao {
-    public User createUser(String username, String email, String password, EntityManager em);
+    public UserDTO createUser(String username, String email, String password, EntityManager em);
+    public boolean usernameExists(String username, EntityManager em);
 }

@@ -5,6 +5,7 @@
  */
 package Persistence;
 
+import DTO.UserDTO;
 import Models.Role;
 import Models.User;
 import Persistence.DAO.ICreateUserDao;
@@ -21,7 +22,6 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import utils.EMF_Creator;
 
 /**
  *
@@ -29,7 +29,7 @@ import utils.EMF_Creator;
  */
 public class CreateUserDaoImpl implements ICreateUserDao {
 
-    public User createUser(String username, String email, String password, EntityManager em) {
+    public UserDTO createUser(String username, String email, String password, EntityManager em) {
         em.getTransaction().begin();
         User user = new User();
         user.setUsername(username);
@@ -38,7 +38,7 @@ public class CreateUserDaoImpl implements ICreateUserDao {
         user.setRole(Role.unverified);
         em.persist(user);
         em.getTransaction().commit();
-        return user;
+        return new UserDTO(user);
     }
 
     public String generatePasswordHash(String password) {
@@ -46,6 +46,7 @@ public class CreateUserDaoImpl implements ICreateUserDao {
         return generatedPasswordHash;
     }
     
+    @Override
     public boolean usernameExists(String username, EntityManager em) {
         TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.username = :un", null);
         query.setParameter("un", username);

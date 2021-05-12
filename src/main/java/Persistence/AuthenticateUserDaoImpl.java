@@ -13,10 +13,6 @@ import javax.persistence.TypedQuery;
 import utils.JWTHandling;
 import utils.ValidationUtils;
 
-/**
- *
- * @author gamma
- */
 public class AuthenticateUserDaoImpl implements IAuthenticateUserDao{
 
     @Override

@@ -10,5 +10,5 @@ package Dependencies;
  * @author gamma
  */
 public interface IEmailConnection {
-    public abstract void sendEmail(String email, String token);
+    public abstract void sendEmail(String email, String username, String url);
 }

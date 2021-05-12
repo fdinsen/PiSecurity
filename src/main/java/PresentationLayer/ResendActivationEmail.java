@@ -7,9 +7,10 @@ package PresentationLayer;
 
 import Exceptions.LoginSampleException;
 import Models.Role;
+import Facades.Interfaces.ILoginFacade;
+import Facades.LoginFacade;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import utils.JWTHandling;
 
 /**
  *
@@ -24,10 +25,14 @@ public class ResendActivationEmail extends Command {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws LoginSampleException {
         String username = (String) request.getSession().getAttribute("username");
-        String token = JWTHandling.createJWT(username);
+        String email = (String) request.getSession().getAttribute("email");
         
-        //TODO implement email
-        request.setAttribute("errMessage", "http://localhost:8080/ValgfagBoilerPlateSecurity-1.0-SNAPSHOT/aut?t=" + token);
+        ILoginFacade facade = new LoginFacade();
+        
+        String url = facade.createActivationUrl(request.getRequestURL().toString(), username);
+        facade.sendActivationEmail(email, username, url);
+        
+        request.setAttribute("emailMsg", "An email with an activation link has been sent to your email.");
         return "index";
     }
     

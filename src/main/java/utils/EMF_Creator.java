@@ -5,12 +5,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 public class EMF_Creator {
+    private static EntityManagerFactory emf;
 
-    /**
-     * Call this method before all integration tests that uses the Grizzly
-     * Server and the Test Database (in @BeforeAll ) Remember to call
-     * enRestTestWithDB() in @AfterAll
-     */
     public static void startREST_TestWithDB() {
         System.setProperty("IS_INTEGRATION_TEST_WITH_DB", "testing");
     }
@@ -23,10 +19,16 @@ public class EMF_Creator {
     }
 
     public static EntityManagerFactory createEntityManagerFactory() {
+        if(emf != null){
+            return emf;
+        }
         return createEntityManagerFactory(false);
     }
 
     public static EntityManagerFactory createEntityManagerFactoryForTest() {
+        if(emf != null){
+            return emf;
+        }
         return createEntityManagerFactory(true);
     }
 
@@ -65,7 +67,7 @@ public class EMF_Creator {
         } else {
             System.out.println("Using the DEV database via persistence-unit --> pu ");
         }
-        EntityManagerFactory emf = null;
+
         try {
             emf =  Persistence.createEntityManagerFactory(puName, null);
 

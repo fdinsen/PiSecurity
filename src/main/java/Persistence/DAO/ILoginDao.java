@@ -1,10 +1,9 @@
 package Persistence.DAO;
 
-import Login.LoginBean;
-import Models.Role;
-import Models.User;
+import DTO.LoginDTO;
+import DTO.UserDTO;
 import javax.persistence.EntityManager;
 
 public interface ILoginDao {
-    public User verifyCredentials(LoginBean bean, EntityManager em);
+    public UserDTO verifyCredentials(LoginDTO bean, EntityManager em);
 }

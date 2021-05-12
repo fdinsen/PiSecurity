@@ -5,28 +5,57 @@
  */
 package Dependencies;
 
+import Models.EmailParams;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import sendinblue.ApiClient;
 import sendinblue.ApiException;
 import sendinblue.Configuration;
 import sendinblue.auth.ApiKeyAuth;
 import sibApi.AccountApi;
 import sibApi.AttributesApi;
+import sibApi.TransactionalEmailsApi;
+import sibModel.CreateSmtpEmail;
 import sibModel.GetAccount;
 import sibModel.GetAttributes;
+import sibModel.SendSmtpEmail;
+import sibModel.SendSmtpEmailSender;
+import sibModel.SendSmtpEmailTo;
 
 /**
  *
  * @author gamma
  */
 public class EmailConnection implements IEmailConnection {
-
+    private static GetAccount account;
     @Override
-    public void sendEmail(String email, String token) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public static void main(String[] args) {
-        setupConnection();
+    public void sendEmail(String email, String username, String url) {
+        if(account == null) {
+            setupConnection();
+        }
+        
+        TransactionalEmailsApi api = new TransactionalEmailsApi();
+        SendSmtpEmail send = new SendSmtpEmail();
+        
+        SendSmtpEmailSender sender = new SendSmtpEmailSender().email("gammarikb@gmail.com").name("Pi Forums");
+        SendSmtpEmailTo reciever = new SendSmtpEmailTo().email(email).name(username);
+        List<SendSmtpEmailTo> recievers = new ArrayList();
+        recievers.add(reciever);
+        
+        send.sender(sender);
+        send.setTo(recievers);
+        send.setTemplateId(1L);
+        send.setParams(new EmailParams(url));
+        
+        CreateSmtpEmail result;
+        try {
+            result = api.sendTransacEmail(send);
+            System.out.println(result);
+        } catch (ApiException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private static void setupConnection() {
@@ -39,15 +68,37 @@ public class EmailConnection implements IEmailConnection {
         //apiKey.setApiKeyPrefix("Token");
 
         AccountApi apiInstance = new AccountApi();
-        AttributesApi apiInstancea = new AttributesApi();
         try {
             GetAccount result = apiInstance.getAccount();
+            account = result;
             System.out.println(result);
-            GetAttributes results = apiInstancea.getAttributes();
-            System.out.println(results);
         } catch (ApiException e) {
             System.err.println("Exception when calling AccountApi#getAccount");
             e.printStackTrace();
         }
+    }
+    
+    public static void main(String[] args) {
+        setupConnection();
+        ApiClient defaultClient = Configuration.getDefaultApiClient();
+        TransactionalEmailsApi api = new TransactionalEmailsApi();
+        SendSmtpEmail send = new SendSmtpEmail();
+        SendSmtpEmailSender sender = new SendSmtpEmailSender().email("gammarikb@gmail.com").name("test sender");
+        SendSmtpEmailTo reciever = new SendSmtpEmailTo().email("gammarik@gmail.com").name("Frederik");
+        List<SendSmtpEmailTo> recievers = new ArrayList();
+        recievers.add(reciever);
+        send.sender(sender);
+        send.setTo(recievers);
+        //send.setHtmlContent("<p>hi</p>");
+        send.setTemplateId(1L);
+        send.setParams(new EmailParams("http://localhost:8080/testssss"));
+        CreateSmtpEmail result;
+        try {
+            result = api.sendTransacEmail(send);
+            System.out.println(result);
+        } catch (ApiException ex) {
+            ex.printStackTrace();
+        }
+
     }
 }

@@ -2,6 +2,7 @@ package Service;
 
 import Persistence.DAO.ILoginDao;
 import Persistence.LoginDaoImpl;
+import Service.Interfaces.ILoginService;
 
 public class LoginService implements ILoginService {
 

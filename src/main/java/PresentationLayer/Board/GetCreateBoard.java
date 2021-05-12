@@ -8,6 +8,7 @@ import Models.User;
 import Persistence.CategoryDaoImpl;
 import Persistence.UserDaoImpl;
 import PresentationLayer.Command;
+import Service.CategoryFacade;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.EMF_Creator;
 
@@ -28,8 +29,8 @@ public class GetCreateBoard extends Command {
 
         //Get categories
         try{
-            CategoryDaoImpl categoryDaoImpl  = new CategoryDaoImpl();
-            List<Category> categories = categoryDaoImpl.getAllCategories(em);
+            CategoryFacade categoryFacade  = new CategoryFacade();
+            List<Category> categories = categoryFacade.getAllCategories();
             request.setAttribute("categories", categories);
         }catch (DBErrorException e) {
             request.setAttribute("errMsg", e.getMessage());

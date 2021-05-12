@@ -10,6 +10,7 @@ import Persistence.BoardsDaoImpl;
 import Persistence.CategoryDaoImpl;
 import Persistence.UserDaoImpl;
 import PresentationLayer.Command;
+import Service.BoardFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.EMF_Creator;
@@ -28,72 +29,19 @@ public class CreateBoard extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
-
-        //Escapes HTML tags
-        String boardName = StringEscapeUtils.escapeHtml4(request.getParameter("name"));
-        String description = StringEscapeUtils.escapeHtml4(request.getParameter("description"));
-        String categoryIdString = request.getParameter("categoryId");
-
-        //categoryId Validation
-        Category category;
         try{
-            category = categoryIdStringValidation(categoryIdString, em);
-        }catch(InvalidInputException e){
-            request.setAttribute("errMsg", e.getMessage());
-            return "createBoard";
-        }catch(Exception e){
-            request.setAttribute("errMsg", "Something went wrong while creating board");
-            return "createBoard";
-        }
-
-        //Board name validation
-        try{
-            boardNameValidation(boardName);
-        }catch(InvalidInputException e){
-            request.setAttribute("errMsg", e.getMessage());
-            return "createBoard";
-        }catch(Exception e){
-            request.setAttribute("errMsg", "Something went wrong while creating board");
-            return "createBoard";
-        }
-
-        //description name validation
-        try{
-            boardDescriptionValidation(description);
-        }catch(InvalidInputException e){
-            request.setAttribute("errMsg", e.getMessage());
-            return "createBoard";
-        }catch(Exception e){
-            request.setAttribute("errMsg", "Something went wrong while creating board");
-            return "createBoard";
-        }
-
-        //Get user
-        User user = null;
-        try{
+            String boardName = request.getParameter("name");
+            String description = request.getParameter("description");
+            String categoryIdString = request.getParameter("categoryId");
             HttpSession session = request.getSession();
-            String userName = (String)session.getAttribute("username");
+            String username = (String)session.getAttribute("username");
 
-            UserDaoImpl userDaoImpl  = new UserDaoImpl();
-            user = userDaoImpl.getUserFromUsername(userName, em);
-        }catch (DBErrorException | UserNotFoundException e) {
+            BoardFacade boardFacade = new BoardFacade();
+            boardFacade.createBoard(boardName,description,categoryIdString,username);
+            request.setAttribute("message", "Board created");
+        }catch (DBErrorException | UserNotFoundException | InvalidInputException e) {
             request.setAttribute("errMsg", e.getMessage());
-            return "createBoard";
-        }catch (Exception e){
-            request.setAttribute("errMsg", "Something went wrong while creating board");
-            return "createBoard";
-        }
-
-        //Create
-        try{
-            BoardsDaoImpl boardsDaoImpl = new BoardsDaoImpl();
-            boardsDaoImpl.createBoard(boardName,description, category, user, em);
-            request.setAttribute("message", "Board created successfully.");
-
-        }catch (DBErrorException e) {
-            request.setAttribute("errMsg", e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
             request.setAttribute("errMsg", "Something went wrong while creating board");
         }
 

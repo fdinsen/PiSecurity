@@ -3,7 +3,7 @@ package PresentationLayer;
 import Exceptions.LoginSampleException;
 import Models.Role;
 import PresentationLayer.Board.CreateBoard;
-import PresentationLayer.Board.ViewCategories;
+import PresentationLayer.Category.ViewCategories;
 import PresentationLayer.Category.CreateCategory;
 import PresentationLayer.Category.DeleteCategory;
 import PresentationLayer.Category.EditCategory;

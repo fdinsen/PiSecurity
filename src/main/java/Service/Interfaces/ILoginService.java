@@ -1,4 +1,4 @@
-package Service;
+package Service.Interfaces;
 
 public interface ILoginService {
     public boolean verifyCredentials(String username, String password);

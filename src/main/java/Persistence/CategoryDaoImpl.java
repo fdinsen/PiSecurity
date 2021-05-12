@@ -49,8 +49,7 @@ public class CategoryDaoImpl implements ICategoryDao {
             return  category;
         } catch (NoResultException nre){
             return null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new DBErrorException("Something went wrong while getting category from category name");
         }
     }
@@ -85,7 +84,7 @@ public class CategoryDaoImpl implements ICategoryDao {
     }
 
     @Override
-    public List<Category> getCategoriesWithBoardsAndCount(EntityManager em) throws DBErrorException {
+    public List<Category> getCategoriesWithBoards(EntityManager em) throws DBErrorException {
         try {
             TypedQuery<Category> query = em.createQuery("SELECT c FROM Category c LEFT JOIN c.boards b", Category.class);
             List<Category> categories = query.getResultList();

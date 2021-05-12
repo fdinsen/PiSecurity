@@ -17,5 +17,7 @@ public interface IBoardDao {
 
     public Board getBoardFromName(String name, EntityManager em) throws DBErrorException;
 
+    public Board getBoardFromID(int boardId, EntityManager em) throws DBErrorException;
+
     public List<Board> getBoardsForCategory(Category category,EntityManager em) throws DBErrorException;
 }

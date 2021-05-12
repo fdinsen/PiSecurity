@@ -10,7 +10,7 @@ import Persistence.BoardsDaoImpl;
 import Persistence.CategoryDaoImpl;
 import Persistence.UserDaoImpl;
 import PresentationLayer.Command;
-import Service.BoardFacade;
+import Facades.BoardFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.EMF_Creator;

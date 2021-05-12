@@ -7,12 +7,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import DTO.LoginDTO;
+import DTO.UserDTO;
 import Models.Role;
-import Models.User;
-import Persistence.LoginDaoImpl;
-
-import javax.persistence.EntityManager;
-import utils.EMF_Creator;
+import Facades.Interfaces.ILoginFacade;
+import Facades.LoginFacade;
 import utils.ValidationUtils;
 
 public class Login extends Command {
@@ -23,8 +21,6 @@ public class Login extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws LoginSampleException {
-        EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
-
         //Escapes HTML tags
         String email = ValidationUtils.escapeUnsafeCharacters(request.getParameter("email"));
         String password = ValidationUtils.escapeUnsafeCharacters(request.getParameter("password"));
@@ -34,14 +30,15 @@ public class Login extends Command {
         loginDTO.setEmail(email);
         loginDTO.setPassword(password);
 
-        LoginDaoImpl loginDao = new LoginDaoImpl();
+        ILoginFacade facade = new LoginFacade();
 
         try {
-            User validatedUser = loginDao.verifyCredentials(loginDTO, em);
+            UserDTO validatedUser = facade.verifyCredentials(loginDTO);
 
             HttpSession session = request.getSession(); //Creating a session
             session.setAttribute("role", validatedUser.getRole().toString());
             session.setAttribute("username", validatedUser.getUsername());
+            session.setAttribute("email", validatedUser.getEmail());
             request.setAttribute("userName", validatedUser.getUsername());
 
             //TODO remove following if statements when deleting admin/editor/user test pages

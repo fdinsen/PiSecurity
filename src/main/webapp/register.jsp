@@ -16,7 +16,9 @@
     </head>
     <body>
         <jsp:include page="WEB-INF/includes/header.jsp"/>
-        <h1 class="display-1">Register</h1>
+        <div class="col-lg text-center" style="">
+            <h1 class="display-1">Register</h1>
+        </div>
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-sm" style=""></div>

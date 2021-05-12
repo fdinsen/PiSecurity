@@ -51,8 +51,8 @@ public abstract class Command {
         if(rolesAllowed.length == 0) {
             return true;
         }
-        
-        Role role = (Role) request.getSession().getAttribute("role");
+        String roleStr = (String) request.getSession().getAttribute("role");
+        Role role = Role.valueOf(roleStr);
         return role != null && Arrays.asList(rolesAllowed).contains(role);
     }
 

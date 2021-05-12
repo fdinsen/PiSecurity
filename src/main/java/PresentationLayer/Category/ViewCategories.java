@@ -5,7 +5,7 @@ import Models.Category;
 import Models.Role;
 import Persistence.CategoryDaoImpl;
 import PresentationLayer.Command;
-import Service.CategoryFacade;
+import Facades.CategoryFacade;
 import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;

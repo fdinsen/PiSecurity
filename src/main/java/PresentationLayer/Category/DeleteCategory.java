@@ -4,7 +4,7 @@ import Exceptions.DBErrorException;
 import Exceptions.InvalidInputException;
 import Models.Role;
 import PresentationLayer.Command;
-import Service.CategoryFacade;
+import Facades.CategoryFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

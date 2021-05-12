@@ -1,4 +1,4 @@
-<% //In case, if Admin session is not set, redirect to Login page
+<% //In case, if Admin session is not set, redirect to DTO page
     if((request.getSession(false).getAttribute("Admin")== null) )
     {
 %>

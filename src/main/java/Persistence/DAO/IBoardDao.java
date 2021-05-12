@@ -13,7 +13,7 @@ import java.util.List;
  * @author Oliver
  */
 public interface IBoardDao {
-    public Board createBoard(String name, String Description, Category category, User createdBy, EntityManager em) throws DBErrorException, UserNotFoundException;
+    public void createBoard(String name, String Description, Category category, User createdBy, EntityManager em) throws DBErrorException, UserNotFoundException;
 
     public Board getBoardFromName(String name, EntityManager em) throws DBErrorException;
 

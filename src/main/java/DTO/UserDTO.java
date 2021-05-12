@@ -8,11 +8,13 @@ import java.util.UUID;
 public class UserDTO {
     private UUID id;
     private String email;
+    private String username;
     private Role role;
 
     public UserDTO(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
+        this.username = user.getUsername();
         this.role = user.getRole();
     }
 
@@ -39,4 +41,13 @@ public class UserDTO {
     public void setRole(Role role) {
         this.role = role;
     }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
 }

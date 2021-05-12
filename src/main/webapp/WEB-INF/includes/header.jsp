@@ -12,8 +12,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <% //In case, if Admin session is not set, redirect to DTO page
-                    if((request.getSession(false).getAttribute("Admin")!= null) )
-                    {
+                    if ((request.getSession(false).getAttribute("Admin") != null)) {
                 %>
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="viewCategories.jsp">Categories</a>
@@ -25,30 +24,29 @@
 
             </ul>
             <% //If logged in show dropdown else show login / register
-                if((request.getSession(true).getAttribute("User")== null) )
-                {
+                if ((request.getSession(true).getAttribute("User") == null)) {
             %>
             <div class="d-flex">
                 <% if (session.getAttribute("username") == null) { %>
-                    <a class="nav-link active" aria-current="page" href="login.jsp">Sign in</a>
-                    <a href="register.jsp"><button class="btn btn-primary">Sign up</button></a>
-                <% } else { %>
-                    <span class="navbar-text" style="color: white">
-                        <%=session.getAttribute("username")%>
-                    </span>
+                <a class="nav-link active" aria-current="page" href="login.jsp">Sign in</a>
+                <a href="register.jsp"><button class="btn btn-primary">Sign up</button></a>
+                <% } else {%>
+                <span class="navbar-text" style="color: white">
+                    <%=session.getAttribute("username")%>
+                </span>
                 <% }%>
             </div>
-            <%}else { %>
+            <%} else {%>
             <ul class="nav pull-right">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Welcome, <%= (request.getSession(true).getAttribute("userName")) %>
+                        Welcome, <%= (request.getSession(true).getAttribute("username"))%>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#">Action</a></li>
                         <li><a class="dropdown-item" href="#">Another action</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="<%=request.getContextPath()%>/LogoutServlet">Logout</a></li>
+                        <li><a class="dropdown-item" href="FrontController?target=logout">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -61,13 +59,14 @@
 <%  String role = (String) request.getSession(false).getAttribute("role");
     if (role != null && role.equals(Role.unverified.toString())) {
 %>
-    <div class="alert alert-warning" role="alert">
+<div class="alert alert-warning" role="alert">
+    <form name="resend" action="FrontController" method="post">
         You have not verified your email! 
-        <form>
-            <input type="hidden" name="target" value="resend">
-            <input type="submit" class="linkbutton" value="Click here to resend">
-        </form>
-    </div>
+        <input type="hidden" name="target" value="resend">
+        <input type="submit" class="linkbutton" value="Click here to resend">
+        <span style="color:green"><%=(request.getAttribute("emailMsg") == null) ? "" : request.getAttribute("emailMsg")%></span>
+    </form>
+</div>
 <%
-}//end if
+    }//end if
 %>

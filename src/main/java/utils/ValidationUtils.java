@@ -10,8 +10,8 @@ import Exceptions.InvalidInputException;
 import Models.Board;
 import Models.Category;
 import Persistence.CategoryDaoImpl;
-import Service.BoardFacade;
-import Service.CategoryFacade;
+import Facades.BoardFacade;
+import Facades.CategoryFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 

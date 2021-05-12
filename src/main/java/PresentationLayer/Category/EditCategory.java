@@ -9,7 +9,7 @@ import Models.User;
 import Persistence.CategoryDaoImpl;
 import Persistence.UserDaoImpl;
 import PresentationLayer.Command;
-import Service.CategoryFacade;
+import Facades.CategoryFacade;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.EMF_Creator;
 

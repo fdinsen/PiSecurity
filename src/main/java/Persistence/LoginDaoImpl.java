@@ -2,6 +2,7 @@ package Persistence;
 
 import Persistence.DAO.ILoginDao;
 import DTO.LoginDTO;
+import DTO.UserDTO;
 import Models.Role;
 import Models.User;
 
@@ -12,7 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 public class LoginDaoImpl implements ILoginDao {
 
     @Override
-    public User verifyCredentials(LoginDTO loginDTO, EntityManager em) {
+    public UserDTO verifyCredentials(LoginDTO loginDTO, EntityManager em) {
         String email = loginDTO.getEmail();
         String password = loginDTO.getPassword();
 
@@ -32,7 +33,7 @@ public class LoginDaoImpl implements ILoginDao {
             roleDB = user.getRole();
             
             if (email.equals(emailDB) && validatePassword(password, passwordDB)) {
-                return user;
+                return new UserDTO(user);
             }
         } catch (Exception e) {
             e.printStackTrace();

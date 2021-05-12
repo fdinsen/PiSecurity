@@ -4,7 +4,7 @@ import Exceptions.DBErrorException;
 import Models.Category;
 import Models.Role;
 import PresentationLayer.Command;
-import Service.ForumFacade;
+import Facades.ForumFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

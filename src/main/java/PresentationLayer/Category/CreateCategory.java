@@ -6,7 +6,7 @@ import Exceptions.UserNotFoundException;
 import Models.Category;
 import Models.Role;
 import PresentationLayer.Command;
-import Service.CategoryFacade;
+import Facades.CategoryFacade;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

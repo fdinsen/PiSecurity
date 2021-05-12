@@ -31,7 +31,7 @@
                     padding-right: 1rem;
                     padding-left: 1rem;
                     overflow-y: auto;
-                    background-color: var(--gray-dark);
+                    background-color: gray;
                     transition: -webkit-transform .3s ease-in-out;
                     transition: transform .3s ease-in-out;
                     transition: transform .3s ease-in-out, -webkit-transform .3s ease-in-out;
@@ -67,7 +67,7 @@
             }
 
             .bg-purple {
-                background-color: var(--purple);
+                background-color: purple;
             }
 
             .border-bottom {

@@ -5,6 +5,7 @@
  */
 package PresentationLayer;
 
+import Dependencies.EmailConnection;
 import Exceptions.LoginSampleException;
 import Models.Role;
 import Persistence.CreateUserDaoImpl;
@@ -58,7 +59,15 @@ public class Register extends Command {
         
         String token = JWTHandling.createJWT(userName);
         //TODO Implement email
-        request.setAttribute("errMessage", "http://localhost:8080/ValgfagBoilerPlateSecurity-1.0-SNAPSHOT/aut?t=" + token);
+        //request.setAttribute("errMessage", "http://localhost:8080/ValgfagBoilerPlateSecurity-1.0-SNAPSHOT/aut?t=" + token);
+        
+        StringBuffer url = request.getRequestURL();
+        int indexOfFrontController = url.indexOf("FrontController");
+        url = url.replace(indexOfFrontController, url.length(), "aut?t=" + token);
+        request.setAttribute("errMessage", url.toString());
+        
+        EmailConnection emailCon = new EmailConnection();
+        emailCon.sendEmail(email, userName, url.toString());
         
         return "login";
 

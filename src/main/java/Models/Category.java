@@ -11,7 +11,7 @@ public class Category implements Serializable{
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cat_id", unique = true)
     private int id;
 

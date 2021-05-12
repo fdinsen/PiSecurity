@@ -10,12 +10,8 @@ import Login.LoginBean;
 import Models.Role;
 import Models.User;
 import Persistence.LoginDaoImpl;
-
-import java.io.IOException;
 import javax.persistence.EntityManager;
 import utils.EMF_Creator;
-import org.apache.commons.text.StringEscapeUtils;
-import utils.Policies;
 import utils.ValidationUtils;
 
 public class Login extends Command {

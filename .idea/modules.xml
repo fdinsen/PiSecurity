@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/PiSecurity.iml" filepath="$PROJECT_DIR$/.idea/PiSecurity.iml" />
-      <module fileurl="file://$PROJECT_DIR$/ValgfagBoilerPlateSecurity.iml" filepath="$PROJECT_DIR$/ValgfagBoilerPlateSecurity.iml" />
     </modules>
   </component>
 </project>

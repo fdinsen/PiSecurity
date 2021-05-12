@@ -19,7 +19,7 @@ public interface ICategoryDao {
 
     public List<Category> getAllCategories(EntityManager em) throws DBErrorException;
 
-    public List<Category> getCategoriesWithBoardsAndCount(EntityManager em) throws DBErrorException;
+    public List<Category> getCategoriesWithBoards(EntityManager em) throws DBErrorException;
 
     public  boolean deleteCategory(Category category,EntityManager em) throws DBErrorException;
 

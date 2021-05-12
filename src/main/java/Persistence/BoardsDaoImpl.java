@@ -63,6 +63,25 @@ public class BoardsDaoImpl implements IBoardDao {
     }
 
     @Override
+    public Board getBoardFromID(int boardId, EntityManager em) throws DBErrorException {
+        //Check if already exist
+        Board board = null;
+
+        //find category in db
+        try {
+            TypedQuery<Board> query = em.createQuery("SELECT b FROM Board b WHERE b.id = :boardId", Board.class);
+            query.setParameter("boardId", boardId);
+            board = query.getSingleResult();
+            return  board;
+        } catch (NoResultException nre){
+            return null;
+        }
+        catch (Exception e) {
+            throw new DBErrorException("Something went wrong while getting board from board id");
+        }
+    }
+
+    @Override
     public List<Board> getBoardsForCategory(Category category, EntityManager em) throws DBErrorException {
         return null;
     }

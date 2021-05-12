@@ -1,4 +1,4 @@
-<%@ page import="PresentationLayer.ViewCategories" %>
+<%@ page import="PresentationLayer.Category.ViewCategories" %>
 <%@ page import="Models.Role" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

@@ -27,13 +27,15 @@
       <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="javax.persistence.jdbc.password" value="ax2"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
     </properties>
   </persistence-unit>
   <!-- Database for testing ONLY -->
   <persistence-unit name="puTest" transaction-type="RESOURCE_LOCAL">
     <!-- DO NOT RENAME THE PERSISTENCE UNIT -->
     <!--            <class>entities.RenameMe</class>-->
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     <class>Models.User</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>

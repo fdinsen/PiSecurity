@@ -9,6 +9,7 @@ import Models.User;
 import Persistence.CategoryDaoImpl;
 import Persistence.UserDaoImpl;
 import PresentationLayer.Command;
+import Service.CategoryFacade;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.EMF_Creator;
 
@@ -27,79 +28,28 @@ public class EditCategory extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
-        EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
-
-        //Escapes HTML
-        int catId;
-        String beginEdit = StringEscapeUtils.escapeHtml4(request.getParameter("beginEdit"));
-        String catIdString = StringEscapeUtils.escapeHtml4(request.getParameter("catId"));
-        String categoryName = StringEscapeUtils.escapeHtml4(request.getParameter("name"));
-
-
-        //Setup for errors
-        request.setAttribute("editing", true);
-        request.setAttribute("editCatId", catIdString);
-        request.setAttribute("categoryName", categoryName);
-
-        //categoryId Validation
-        Category category;
         try{
-            category = categoryIdStringValidation(catIdString, em);
-        }catch(InvalidInputException e){
-            request.setAttribute("errMsg", e.getMessage());
-            return "createCategory";
-        }catch(Exception e){
-            request.setAttribute("errMsg", "Something went wrong while updating category");
-            return "createCategory";
-        }
+            String beginEditString = request.getParameter("beginEdit");
+            String catIdString = request.getParameter("catId");
+            String categoryName = request.getParameter("name");
 
-        //Category name validation
-        try{
-            categoryNameValidation(categoryName);
-        }catch(InvalidInputException e){
-            request.setAttribute("errMsg", e.getMessage());
-            return "createCategory";
-        }catch(Exception e){
-            request.setAttribute("errMsg", "Something went wrong while updating category");
-            return "createCategory";
-        }
-
-        //First click on edit
-        if(beginEdit != null && beginEdit.equals("1")) {
-            return "viewCategories";
-        }
-
-        //Get user
-        User user = null;
-        try{
+            //Get user
             HttpSession session = request.getSession();
-            String userName = (String)session.getAttribute("username");
+            String username = (String)session.getAttribute("username");
 
-            UserDaoImpl userDaoImpl  = new UserDaoImpl();
-            user = userDaoImpl.getUserFromUsername(userName, em);
-        }catch (DBErrorException | UserNotFoundException e) {
-            request.setAttribute("errMsg", e.getMessage());
-            return "viewCategories";
-        }catch (Exception e){
-            request.setAttribute("errMsg", "Something went wrong while updating category");
-            return "viewCategories";
-        }
-
-        //Create
-        try{
-            CategoryDaoImpl categoryDaoImpl = new CategoryDaoImpl();
-            categoryDaoImpl.editCategory(category,categoryName, user, em);
-
+            //Setup for errors
             request.setAttribute("editing", true);
-            request.setAttribute("editCatId", null);
-            request.setAttribute("categoryName", null);
-            request.setAttribute("message", "Category updated successfully.");
-        }catch (DBErrorException e) {
+            request.setAttribute("editCatId", catIdString);
+            request.setAttribute("categoryName", categoryName);
+
+            CategoryFacade categoryFacade = new CategoryFacade();
+            Boolean beginEdit = categoryFacade.editCategory(catIdString,categoryName,username,beginEditString);
+            request.setAttribute("editing", beginEdit);
+        } catch (UserNotFoundException | InvalidInputException | DBErrorException e) {
             request.setAttribute("errMsg", e.getMessage());
         } catch (Exception e){
             request.setAttribute("errMsg", "Something went wrong while updating category");
         }
-
         return "viewCategories";
     }
 }

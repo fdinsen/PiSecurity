@@ -7,8 +7,11 @@ package utils;
 
 import Exceptions.DBErrorException;
 import Exceptions.InvalidInputException;
+import Models.Board;
 import Models.Category;
 import Persistence.CategoryDaoImpl;
+import Service.BoardFacade;
+import Service.CategoryFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -66,7 +69,7 @@ public class ValidationUtils {
         }
     }
 
-    public static Category categoryIdStringValidation(String catID, EntityManager em) throws InvalidInputException {
+    public static Category categoryIdStringValidation(String catID) throws InvalidInputException {
         if(StringUtils.isBlank(catID)){
             throw new InvalidInputException("Category id must be set and not be only whitespace");
         }
@@ -80,8 +83,8 @@ public class ValidationUtils {
 
         //Get category
         try{
-            CategoryDaoImpl categoryDaoImpl  = new CategoryDaoImpl();
-            Category category = categoryDaoImpl.getCategoryFromID(categoryId, em);
+            CategoryFacade categoryFacade  = new CategoryFacade();
+            Category category = categoryFacade.getCategoryFromID(categoryId);
             return category;
         }catch (DBErrorException e) {
             throw new InvalidInputException(e.getMessage());
@@ -100,16 +103,27 @@ public class ValidationUtils {
         }
     }
 
-    public static int boardIdStringValidation(String boardIDString) throws InvalidInputException {
+    public static Board boardIdStringValidation(String boardIDString) throws InvalidInputException {
         if(StringUtils.isBlank(boardIDString)){
             throw new InvalidInputException("Board id must be set and not be only whitespace");
         }
 
+        int boardIdInt;
         try{
-            int boardIdInt = Integer.parseInt(boardIDString);
-            return boardIdInt;
+            boardIdInt = Integer.parseInt(boardIDString);
         }catch(Exception e){
             throw new InvalidInputException("Board ID must be a integer");
+        }
+
+        //Get board
+        try{
+            BoardFacade boardFacade  = new BoardFacade();
+            Board board = boardFacade.getBoardFromID(boardIdInt);
+            return board;
+        }catch (DBErrorException e) {
+            throw new InvalidInputException(e.getMessage());
+        }catch (Exception e){
+            throw new InvalidInputException("Something went wrong while getting board from DB");
         }
     }
 

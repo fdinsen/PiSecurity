@@ -1,29 +1,20 @@
 package Persistence;
 
 import Persistence.DAO.ILoginDao;
-import Login.LoginBean;
+import DTO.LoginDTO;
 import Models.Role;
 import Models.User;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import utils.EMF_Creator;
 
 public class LoginDaoImpl implements ILoginDao {
 
     @Override
-    public User verifyCredentials(LoginBean loginBean, EntityManager em) {
-        String email = loginBean.getEmail();
-        String password = loginBean.getPassword();
+    public User verifyCredentials(LoginDTO loginDTO, EntityManager em) {
+        String email = loginDTO.getEmail();
+        String password = loginDTO.getPassword();
 
         User user = null;
         String emailDB = "";

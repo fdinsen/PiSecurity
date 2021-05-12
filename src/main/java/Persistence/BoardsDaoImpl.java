@@ -16,7 +16,7 @@ public class BoardsDaoImpl implements IBoardDao {
 
 
     @Override
-    public Board createBoard(String name, String description, Category category, User createdBy, EntityManager em) throws DBErrorException, UserNotFoundException {
+    public void createBoard(String name, String description, Category category, User createdBy, EntityManager em) throws DBErrorException, UserNotFoundException {
         Board board = null;
         try{
             board = getBoardFromName(name, em);
@@ -37,7 +37,6 @@ public class BoardsDaoImpl implements IBoardDao {
             board.setCreatedBy(createdBy);
             em.persist(board);
             em.getTransaction().commit();
-            return board;
         } catch (Exception e) {
             throw new DBErrorException("Something went wrong while creating board in DB");
         }

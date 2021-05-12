@@ -11,7 +11,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <% //In case, if Admin session is not set, redirect to Login page
+                <% //In case, if Admin session is not set, redirect to DTO page
                     if((request.getSession(false).getAttribute("Admin")!= null) )
                     {
                 %>

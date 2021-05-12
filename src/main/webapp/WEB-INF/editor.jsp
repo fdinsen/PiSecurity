@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="styles.css">
         <title>Editor Page</title>
     </head>
-    <% //In case, if Editor session is not set, redirect to Login page
+    <% //In case, if Editor session is not set, redirect to DTO page
         if((request.getSession(false).getAttribute("Editor")== null) )
         {
     %>

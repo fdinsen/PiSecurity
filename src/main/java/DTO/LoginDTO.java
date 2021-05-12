@@ -1,6 +1,6 @@
-package Login;
+package DTO;
 
-public class LoginBean {
+public class LoginDTO {
 
     private String email;
     private String password;

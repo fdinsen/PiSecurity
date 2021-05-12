@@ -13,7 +13,7 @@
             <jsp:include page="WEB-INF/includes/header.jsp"/>
             <div class="container">
                 <div class="col-lg text-center" style="">
-                    <h1 class="display-1">Login</h1>
+                    <h1 class="display-1">DTO</h1>
                 </div>
                 <div class="row align-items-center">
                     <div class="col-sm" style=""></div>
@@ -34,7 +34,7 @@
                                     <span style="color:red"><%=(request.getAttribute("errMessage") == null) ? "" : request.getAttribute("errMessage")%></span>
                                     <span style="color:green"><%=(request.getAttribute("message") == null) ? "" : request.getAttribute("message")%></span>
                                     <div class="m-3">
-                                        <input class="btn btn-primary" type="submit" value="Login"></input>
+                                        <input class="btn btn-primary" type="submit" value="DTO"></input>
                                         <input class="btn btn-secondary" type="reset" value="Reset"></input>
                                     </div>
                                 </form>

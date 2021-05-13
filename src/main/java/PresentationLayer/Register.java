@@ -9,10 +9,12 @@ import Exceptions.LoginSampleException;
 import Models.Role;
 import Facades.Interfaces.ILoginFacade;
 import Facades.LoginFacade;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import utils.Policies;
 import utils.ValidationUtils;
+import utils.VerifyRecaptcha;
 
 /**
  *
@@ -32,8 +34,19 @@ public class Register extends Command {
         String password = ValidationUtils.escapeUnsafeCharacters(request.getParameter("password"));
         String password1 = ValidationUtils.escapeUnsafeCharacters(request.getParameter("password1"));
 
-        ILoginFacade facade = new LoginFacade();
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        try {
+            boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+            if (!verify) {
+                request.setAttribute("errMessage", "Please click the captcha.");
+                return "register";
+            }
+        } catch (IOException e) {
+            request.setAttribute("errMessage", "Something went wrong with the Captcha.");
+            return "register";
+        }
 
+        ILoginFacade facade = new LoginFacade();
         if (!ValidationUtils.isPasswordValid(password)) {
             request.setAttribute("errMessage", Policies.getPasswordPolicy());
             return "register";
@@ -48,7 +61,7 @@ public class Register extends Command {
         }
 
         facade.createUser(username, email, password);
-        
+
         String url = facade.createActivationUrl(request.getRequestURL().toString(), username);
         facade.sendActivationEmail(email, username, url);
 

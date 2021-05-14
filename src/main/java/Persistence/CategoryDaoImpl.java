@@ -187,9 +187,4 @@ public class CategoryDaoImpl implements ICategoryDao {
             em.close();
         }
     }
-
-    @Override
-    public void editCategory(Category categoryDTO, String name, User user, EntityManager em) throws DBErrorException {
-
-    }
 }

@@ -27,6 +27,4 @@ public interface ICategoryDao {
     public  void deleteCategory(CategoryDTO categoryDTO,EntityManager em) throws DBErrorException;
 
     public  void editCategory(CategoryDTO categoryDTO, String name, User user, EntityManager em) throws DBErrorException;
-
-    void editCategory(Category categoryDTO, String name, User user, EntityManager em) throws DBErrorException;
 }

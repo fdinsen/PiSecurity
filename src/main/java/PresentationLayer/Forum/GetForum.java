@@ -2,7 +2,6 @@ package PresentationLayer.Forum;
 
 import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
-import Models.Category;
 import Models.Role;
 import PresentationLayer.Command;
 import Facades.ForumFacade;

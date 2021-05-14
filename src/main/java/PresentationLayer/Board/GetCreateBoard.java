@@ -28,6 +28,9 @@ public class GetCreateBoard extends Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
 
+        String catIdString = request.getParameter("catId");
+        request.setAttribute("catId", catIdString);
+
         //Get categories
         try{
             CategoryFacade categoryFacade  = new CategoryFacade();

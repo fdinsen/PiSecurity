@@ -1,4 +1,6 @@
 package Persistence.DAO;
+import DTO.BoardDTO;
+import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
 import Exceptions.UserNotFoundException;
 import Models.Board;
@@ -13,11 +15,17 @@ import java.util.List;
  * @author Oliver
  */
 public interface IBoardDao {
-    public void createBoard(String name, String Description, Category category, User createdBy, EntityManager em) throws DBErrorException, UserNotFoundException;
+    public void createBoard(String name, String description, CategoryDTO categoryDTO, User createdBy, EntityManager em) throws DBErrorException, UserNotFoundException;
 
-    public Board getBoardFromName(String name, EntityManager em) throws DBErrorException;
+    public BoardDTO getBoardFromName(String name, Boolean closeEM, EntityManager em) throws DBErrorException;
 
-    public Board getBoardFromID(int boardId, EntityManager em) throws DBErrorException;
+    public BoardDTO getBoardDTOFromID(int boardId,Boolean closeEM, EntityManager em) throws DBErrorException;
 
-    public List<Board> getBoardsForCategory(Category category,EntityManager em) throws DBErrorException;
+    public Board getBoardFromID(int boardId,Boolean closeEM, EntityManager em) throws DBErrorException;
+
+    public List<BoardDTO> getBoardsForCategory(CategoryDTO categoryDTO, EntityManager em) throws DBErrorException;
+
+    void editBoard(BoardDTO boardDTO, String boardName, String description, User user, EntityManager em) throws DBErrorException;
+
+    void deleteBoard(BoardDTO boardDTO, EntityManager em) throws DBErrorException;
 }

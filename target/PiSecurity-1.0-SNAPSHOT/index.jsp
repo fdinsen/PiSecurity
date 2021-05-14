@@ -66,10 +66,6 @@
                 color: rgba(255, 255, 255, .5);
             }
 
-            .bg-purple {
-                background-color: purple;
-            }
-
             .border-bottom {
                 border-bottom: 1px solid #e5e5e5;
             }

@@ -29,6 +29,9 @@ public class CreateBoard extends Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        String catIdString = request.getParameter("catId");
+        request.setAttribute("catId", catIdString);
+
         try{
             String boardName = request.getParameter("name");
             String description = request.getParameter("description");
@@ -41,10 +44,12 @@ public class CreateBoard extends Command {
             request.setAttribute("message", "Board created");
         }catch (DBErrorException | UserNotFoundException | InvalidInputException e) {
             request.setAttribute("errMsg", e.getMessage());
+            return "createBoard";
         } catch (Exception e) {
             request.setAttribute("errMsg", "Something went wrong while creating board");
+            return "createBoard";
         }
 
-        return "createBoard";
+        return "AdminViewBoardsForCategory";
     }
 }

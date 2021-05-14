@@ -95,6 +95,11 @@
                                     <input type="hidden" name="beginEdit" value="1">
                                     </form>
                                     <form action="FrontController" method="POST">
+                                        <input type="hidden" name="target" value="adminViewBoardsForCategory">
+                                        <input type="hidden" name="catId" value="${category.id}">
+                                        <button type="submit" class="btn btn-outline-secondary btn">Boards</button>
+                                    </form>
+                                    <form action="FrontController" method="POST">
                                         <input type="hidden" name="target" value="deleteCategory">
                                         <input type="hidden" name="catId" value="${category.id}">
                                         <button type="submit" class="btn btn-outline-danger btn">Delete</button>
@@ -102,8 +107,6 @@
                                 </td>
                             </c:otherwise>
                         </c:choose>
-
-
                         </tr>
                         </c:forEach>
                         </tbody>

@@ -5,6 +5,8 @@
  */
 package utils;
 
+import DTO.BoardDTO;
+import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
 import Exceptions.InvalidInputException;
 import Models.Board;
@@ -69,7 +71,7 @@ public class ValidationUtils {
         }
     }
 
-    public static Category categoryIdStringValidation(String catID) throws InvalidInputException {
+    public static CategoryDTO categoryIdStringValidation(String catID) throws InvalidInputException {
         if(StringUtils.isBlank(catID)){
             throw new InvalidInputException("Category id must be set and not be only whitespace");
         }
@@ -84,8 +86,8 @@ public class ValidationUtils {
         //Get category
         try{
             CategoryFacade categoryFacade  = new CategoryFacade();
-            Category category = categoryFacade.getCategoryFromID(categoryId);
-            return category;
+            CategoryDTO categoryDTO = categoryFacade.getCategoryFromID(categoryId);
+            return categoryDTO;
         }catch (DBErrorException e) {
             throw new InvalidInputException(e.getMessage());
         }catch (Exception e){
@@ -103,7 +105,7 @@ public class ValidationUtils {
         }
     }
 
-    public static Board boardIdStringValidation(String boardIDString) throws InvalidInputException {
+    public static BoardDTO boardIdStringValidation(String boardIDString) throws InvalidInputException {
         if(StringUtils.isBlank(boardIDString)){
             throw new InvalidInputException("Board id must be set and not be only whitespace");
         }
@@ -118,7 +120,7 @@ public class ValidationUtils {
         //Get board
         try{
             BoardFacade boardFacade  = new BoardFacade();
-            Board board = boardFacade.getBoardFromID(boardIdInt);
+            BoardDTO board = boardFacade.getBoardFromID(boardIdInt);
             return board;
         }catch (DBErrorException e) {
             throw new InvalidInputException(e.getMessage());

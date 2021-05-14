@@ -29,6 +29,7 @@
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
       <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="connection.pool_size" value="100" />
     </properties>
   </persistence-unit>
   <!-- Database for testing ONLY -->

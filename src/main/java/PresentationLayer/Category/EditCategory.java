@@ -33,7 +33,7 @@ public class EditCategory extends Command {
             String catIdString = request.getParameter("catId");
             String categoryName = request.getParameter("name");
 
-            //Get user
+            //Get username
             HttpSession session = request.getSession();
             String username = (String)session.getAttribute("username");
 

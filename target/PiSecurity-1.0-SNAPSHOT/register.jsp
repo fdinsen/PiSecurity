@@ -3,12 +3,12 @@
     Created on : 03-May-2021, 16:41:48
     Author     : gamma
 --%>
-
 <%@page import="PresentationLayer.CaptchaKeyHandler"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <% CaptchaKeyHandler.setPublicCaptchaKey(request); %>
+
 <!DOCTYPE html>
 <html>
     <head>

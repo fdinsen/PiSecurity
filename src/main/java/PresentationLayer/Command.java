@@ -2,7 +2,7 @@ package PresentationLayer;
 
 import Exceptions.LoginSampleException;
 import Models.Role;
-import PresentationLayer.Board.CreateBoard;
+import PresentationLayer.Board.*;
 import PresentationLayer.Category.ViewCategories;
 import PresentationLayer.Category.CreateCategory;
 import PresentationLayer.Category.DeleteCategory;
@@ -29,7 +29,11 @@ public abstract class Command {
         commands.put("viewCategories", new ViewCategories(new Role[]{}));
         commands.put("editCategory", new EditCategory(new Role[]{}));
         commands.put("deleteCategory", new DeleteCategory(new Role[]{}));
+        commands.put("getCreateBoard", new GetCreateBoard(new Role[]{}));
         commands.put("createBoard", new CreateBoard(new Role[]{}));
+        commands.put("adminViewBoardsForCategory", new AdminViewBoardsForCategory(new Role[]{}));
+        commands.put("editBoard", new EditBoard(new Role[]{}));
+        commands.put("deleteBoard", new DeleteBoard(new Role[]{}));
     }
 
     public static Command from( HttpServletRequest request ) {

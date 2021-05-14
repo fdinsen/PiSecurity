@@ -1,5 +1,6 @@
 package PresentationLayer.Board;
 
+import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
 import Exceptions.UserNotFoundException;
 import Models.Category;
@@ -27,10 +28,13 @@ public class GetCreateBoard extends Command {
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
 
+        String catIdString = request.getParameter("catId");
+        request.setAttribute("catId", catIdString);
+
         //Get categories
         try{
             CategoryFacade categoryFacade  = new CategoryFacade();
-            List<Category> categories = categoryFacade.getAllCategories();
+            List<CategoryDTO> categories = categoryFacade.getAllCategories();
             request.setAttribute("categories", categories);
         }catch (DBErrorException e) {
             request.setAttribute("errMsg", e.getMessage());

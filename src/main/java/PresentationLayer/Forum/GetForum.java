@@ -1,7 +1,7 @@
 package PresentationLayer.Forum;
 
+import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
-import Models.Category;
 import Models.Role;
 import PresentationLayer.Command;
 import Facades.ForumFacade;
@@ -20,7 +20,7 @@ public class GetForum extends Command {
         //Get categories
         try{
             ForumFacade forumFacade  = new ForumFacade();
-            List<Category> categories = forumFacade.getCategoriesWithBoards();
+            List<CategoryDTO> categories = forumFacade.getCategoriesWithBoards();
             request.setAttribute("categories", categories);
         }catch (DBErrorException e) {
             request.setAttribute("errMsg", e.getMessage());

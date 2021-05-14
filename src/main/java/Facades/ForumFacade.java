@@ -1,5 +1,6 @@
 package Facades;
 
+import DTO.CategoryDTO;
 import Exceptions.DBErrorException;
 import Models.Category;
 import Persistence.CategoryDaoImpl;
@@ -11,7 +12,7 @@ import java.util.List;
 
 public class ForumFacade implements IForumFacade {
     @Override
-    public List<Category> getCategoriesWithBoards() throws DBErrorException {
+    public List<CategoryDTO> getCategoriesWithBoards() throws DBErrorException {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
 
         //Get categories

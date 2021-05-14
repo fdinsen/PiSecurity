@@ -4,14 +4,18 @@
     Author     : gamma
 --%>
 
+<%@page import="PresentationLayer.CaptchaKeyHandler"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<% CaptchaKeyHandler.setPublicCaptchaKey(request); %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
         <link rel="stylesheet" href="styles.css">
+        <script src="https://www.google.com/recaptcha/api.js"></script>
         <title>Register</title>
     </head>
     <body>
@@ -45,6 +49,7 @@
                                     <input type="password" name="password1" class="form-control"/>
                                 </div>
                                 <span style="color:red"><%=(request.getAttribute("errMessage") == null) ? "" : request.getAttribute("errMessage")%></span>
+                                <div class="mt-3 g-recaptcha" data-sitekey=${requestScope.key}></div>
                                 <div class="m-3">
                                     <input class="btn btn-primary" type="submit" value="Register"></input>
                                     <input class="btn btn-secondary" type="reset" value="Reset"></input>

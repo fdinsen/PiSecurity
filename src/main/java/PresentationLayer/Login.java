@@ -11,7 +11,9 @@ import DTO.UserDTO;
 import Models.Role;
 import Facades.Interfaces.ILoginFacade;
 import Facades.LoginFacade;
+import java.io.IOException;
 import utils.ValidationUtils;
+import utils.VerifyRecaptcha;
 
 public class Login extends Command {
 
@@ -24,14 +26,23 @@ public class Login extends Command {
         //Escapes HTML tags
         String email = ValidationUtils.escapeUnsafeCharacters(request.getParameter("email"));
         String password = ValidationUtils.escapeUnsafeCharacters(request.getParameter("password"));
-
+        
+        String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+        try {
+            boolean verify = VerifyRecaptcha.verify(gRecaptchaResponse);
+            if(!verify) {
+                request.setAttribute("errMessage", "Please click the captcha.");
+                return "login";
+            }
+        }catch(IOException e) {
+            request.setAttribute("errMessage", "Something went wrong with the Captcha.");
+            return "login";
+        }
+        
         LoginDTO loginDTO = new LoginDTO();
-
         loginDTO.setEmail(email);
         loginDTO.setPassword(password);
-
         ILoginFacade facade = new LoginFacade();
-
         try {
             UserDTO validatedUser = facade.verifyCredentials(loginDTO);
 
@@ -58,17 +69,18 @@ public class Login extends Command {
 
                 session.setMaxInactiveInterval(10 * 60);
                 session.setAttribute("User", validatedUser.getUsername());
-
-                return "/WEB-INF/user";
+                
+                return "index";
+                //return "/WEB-INF/user";
             }
-            if(validatedUser.getRole().equals(Role.unverified)) {
+            if (validatedUser.getRole().equals(Role.unverified)) {
                 session.setAttribute("User", validatedUser.getUsername());
                 return "/WEB-INF/user";
             }
 
             System.out.println("Error message = " + "Username or password is incorrect.");
             request.setAttribute("errMessage", "Username or password is incorrect.");
-
+            
             return "login";
 
         } catch (NullPointerException e1) {

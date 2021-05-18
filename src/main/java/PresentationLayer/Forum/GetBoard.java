@@ -27,9 +27,9 @@ public class GetBoard extends Command {
             BoardDTO boardDTO = forumFacade.getBoardWithThreads(boardIdString);
             request.setAttribute("board", boardDTO);
         }catch (DBErrorException e) {
-            request.setAttribute("errMsg", e.getMessage());
+            request.setAttribute("errMessage", e.getMessage());
         }catch (Exception e){
-            request.setAttribute("errMsg", "Something went wrong while getting board and threads");
+            request.setAttribute("errMessage", "Something went wrong while getting board and threads");
         }
 
         return "board";

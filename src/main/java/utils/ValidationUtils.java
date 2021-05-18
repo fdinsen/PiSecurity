@@ -107,18 +107,18 @@ public class ValidationUtils {
         }
     }
 
-    public static int boardIdStringValidation(String boardIDString) throws InvalidInputException {
-        if(StringUtils.isBlank(boardIDString)){
-            throw new InvalidInputException("Board id must be set and not be only whitespace");
+    public static int idStringValidation(String IDString) throws InvalidInputException {
+        if(StringUtils.isBlank(IDString)){
+            throw new InvalidInputException("Id must be set and not be only whitespace");
         }
 
-        int boardIdInt;
+        int IdInt;
         try{
-            boardIdInt = Integer.parseInt(boardIDString);
+            IdInt = Integer.parseInt(IDString);
         }catch(Exception e){
-            throw new InvalidInputException("Board ID must be a integer");
+            throw new InvalidInputException("ID must be a integer");
         }
-        return boardIdInt;
+        return IdInt;
     }
 
     public static void boardDescriptionValidation(String boardDescription) throws InvalidInputException {

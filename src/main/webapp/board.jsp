@@ -173,7 +173,7 @@ This doesn't work. I haven't been able to figure out why.
                                         <tr>
                                             <td>
                                                 <div class="desc-wrapper">
-                                                    <a href="thread.jsp?tId=<c:out value="${thread.id}"/>"><c:out
+                                                    <a href="thread.jsp?threadId=<c:out value="${thread.id}"/>"><c:out
                                                             value="${thread.name}"/></a> <br>
                                                     by&nbsp;<a href="" style="color: #AA0000;"><c:out
                                                             value="${thread.createdBy.username}"/></a>

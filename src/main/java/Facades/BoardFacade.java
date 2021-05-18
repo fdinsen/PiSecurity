@@ -93,7 +93,7 @@ public class BoardFacade implements IBoardFacade {
         username = StringEscapeUtils.escapeHtml4(username);
 
         //boardId Validation
-        int boardId = boardIdStringValidation(boardIdString);
+        int boardId = idStringValidation(boardIdString);
 
         //Board name validation
         boardNameValidation(boardName);
@@ -125,7 +125,7 @@ public class BoardFacade implements IBoardFacade {
             boardIdString = StringEscapeUtils.escapeHtml4(boardIdString);
 
             //boardId Validation
-            int boardId = boardIdStringValidation(boardIdString);
+            int boardId = idStringValidation(boardIdString);
 
             //Delete
             BoardsDaoImpl boardsDao = new BoardsDaoImpl();

@@ -2,6 +2,7 @@ package utils;
 
 import DTO.BoardDTO;
 import DTO.CategoryDTO;
+import DTO.ThreadDTO;
 import Exceptions.DBErrorException;
 import Exceptions.InvalidInputException;
 import Exceptions.UserNotFoundException;
@@ -62,8 +63,10 @@ public class TestSystem {
         //BoardDTO boardDTO = forumFacade.getBoardWithThreads("1");
 //        ThreadFacade threadF = new ThreadFacade();
 //        threadF.createThread("titljgjhhger", "<p>This is thbvnbvhe content</p>", "1", "frederikdinsen");
-        ForumFacade forumFacade = new ForumFacade();
-        BoardDTO boardDTO = forumFacade.getBoardWithThreads("1");
+//        ForumFacade forumFacade = new ForumFacade();
+//        BoardDTO boardDTO = forumFacade.getBoardWithThreads("1");
+        ThreadFacade facade = new ThreadFacade();
+        ThreadDTO threadDTO = facade.getThread("1");
         EMF.close();
     }
 

@@ -14,7 +14,7 @@ import utils.EMF_Creator;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-import static utils.ValidationUtils.boardIdStringValidation;
+import static utils.ValidationUtils.idStringValidation;
 import static utils.ValidationUtils.categoryIdStringValidation;
 
 public class ForumFacade implements IForumFacade {
@@ -34,7 +34,7 @@ public class ForumFacade implements IForumFacade {
         boardIdString = StringEscapeUtils.escapeHtml4(boardIdString);
 
         //categoryId Validation
-        int boardId = boardIdStringValidation(boardIdString);
+        int boardId = idStringValidation(boardIdString);
 
         //Get board
         BoardsDaoImpl boardsDaoImpl  = new BoardsDaoImpl();

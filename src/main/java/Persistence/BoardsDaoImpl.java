@@ -153,11 +153,11 @@ public class BoardsDaoImpl implements IBoardDao {
     }
 
     @Override
-    public void editBoard(BoardDTO boardDTO, String boardName, String description, User user, EntityManager em) throws DBErrorException {
+    public void editBoard(int boardId, String boardName, String description, User user, EntityManager em) throws DBErrorException {
         try {
             em.getTransaction().begin();
             //Get category from dto
-            Board board = getBoardFromID(boardDTO.getId(),false, em);
+            Board board = getBoardFromID(boardId,false, em);
 
             board.setName(boardName);
             board.setDescription(description);
@@ -172,13 +172,13 @@ public class BoardsDaoImpl implements IBoardDao {
     }
 
     @Override
-    public void deleteBoard(BoardDTO boardDTO, EntityManager em) throws DBErrorException {
+    public void deleteBoard(int boardId, EntityManager em) throws DBErrorException {
         try {
             //Delete
             em.getTransaction().begin();
 
             //Get category from dto
-            Board board = getBoardFromID(boardDTO.getId(),false, em);
+            Board board = getBoardFromID(boardId, false, em);
 
             em.remove(board);
             em.getTransaction().commit();

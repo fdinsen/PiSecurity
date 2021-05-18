@@ -15,13 +15,13 @@ import javax.persistence.TypedQuery;
 public class ThreadDaoImpl implements IThreadDao {
 
     @Override
-    public int createThread(String name, String text, BoardDTO boardDTO, User user, EntityManager em) throws DBErrorException {
+    public int createThread(String name, String text, int boardId, User user, EntityManager em) throws DBErrorException {
         try {
             em.getTransaction().begin();
             Thread thread = new Thread();
             thread.setName(name);
             BoardsDaoImpl boardsDao = new BoardsDaoImpl();
-            Board board = boardsDao.getBoardFromID(boardDTO.getId(), false, em);
+            Board board = boardsDao.getBoardFromID(boardId, false, em);
             thread.setBoard(board);
             thread.setText(text);
             thread.setCreatedBy(user);

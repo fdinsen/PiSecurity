@@ -34,13 +34,14 @@ public class ForumFacade implements IForumFacade {
         boardIdString = StringEscapeUtils.escapeHtml4(boardIdString);
 
         //categoryId Validation
-        BoardDTO boardDTO = boardIdStringValidation(boardIdString);
+        int boardId = boardIdStringValidation(boardIdString);
 
-        if(boardDTO == null){
-            throw new InvalidInputException("Board was not found in DB");
-        }
         //Get board
         BoardsDaoImpl boardsDaoImpl  = new BoardsDaoImpl();
-        return boardsDaoImpl.getBoardWithThreads(boardDTO.getId(), em);
+        BoardDTO dto = boardsDaoImpl.getBoardWithThreads(boardId, em);
+        if(dto == null) {
+            throw new InvalidInputException("Board was not found in DB");
+        }
+        return dto;
     }
 }

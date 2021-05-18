@@ -107,7 +107,7 @@ public class ValidationUtils {
         }
     }
 
-    public static BoardDTO boardIdStringValidation(String boardIDString) throws InvalidInputException {
+    public static int boardIdStringValidation(String boardIDString) throws InvalidInputException {
         if(StringUtils.isBlank(boardIDString)){
             throw new InvalidInputException("Board id must be set and not be only whitespace");
         }
@@ -118,17 +118,7 @@ public class ValidationUtils {
         }catch(Exception e){
             throw new InvalidInputException("Board ID must be a integer");
         }
-
-        //Get board
-        try{
-            BoardFacade boardFacade  = new BoardFacade();
-            BoardDTO board = boardFacade.getBoardFromID(boardIdInt);
-            return board;
-        }catch (DBErrorException e) {
-            throw new InvalidInputException(e.getMessage());
-        }catch (Exception e){
-            throw new InvalidInputException("Something went wrong while getting board from DB");
-        }
+        return boardIdInt;
     }
 
     public static void boardDescriptionValidation(String boardDescription) throws InvalidInputException {

@@ -29,6 +29,8 @@ public class CategoryDTO {
                 boardDTOS.add(boardDTO);
             }
             this.boards = boardDTOS;
+        }else {
+            this.boards = new ArrayList();
         }
         this.createdBy = new UserDTO(category.getCreatedBy());
         if(category.getUpdatedBy() != null) {

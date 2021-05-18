@@ -56,8 +56,11 @@ public class BoardDTO {
     private List<ThreadDTO> threadsToThreadsDTO(List<Thread> threads, BoardDTO boardDTO) {
         //Threads
         List<ThreadDTO> threadDTOS = new ArrayList<>();
-        for (int i = 0; i < threads.size(); i++) {
-            ThreadDTO threadDTO = new ThreadDTO(threads.get(i), boardDTO);
+        if(threads == null) {
+            return threadDTOS;
+        }
+        for (Thread thread : threads) {
+            ThreadDTO threadDTO = new ThreadDTO(thread, boardDTO);
             threadDTOS.add(threadDTO);
         }
         return threadDTOS;

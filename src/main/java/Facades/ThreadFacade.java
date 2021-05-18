@@ -29,7 +29,7 @@ public class ThreadFacade implements IThreadFacade {
         createdByUsername = StringEscapeUtils.escapeHtml4(createdByUsername);
 
         //boardId Validation
-        BoardDTO boardDTO = boardIdStringValidation(boardId);
+        int boardIdInt = boardIdStringValidation(boardId);
 
         //threadName name validation
         threadNameValidation(threadName);
@@ -43,6 +43,6 @@ public class ThreadFacade implements IThreadFacade {
 
         //Create
         ThreadDaoImpl threadDaoImpl = new ThreadDaoImpl();
-        return threadDaoImpl.createThread(threadName,cleanedText,boardDTO, user, em);
+        return threadDaoImpl.createThread(threadName,cleanedText,boardIdInt, user, em);
     }
 }

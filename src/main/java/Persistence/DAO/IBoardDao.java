@@ -27,7 +27,7 @@ public interface IBoardDao {
 
     public List<BoardDTO> getBoardsForCategory(CategoryDTO categoryDTO, EntityManager em) throws DBErrorException;
 
-    void editBoard(BoardDTO boardDTO, String boardName, String description, User user, EntityManager em) throws DBErrorException;
+    void editBoard(int boardId, String boardName, String description, User user, EntityManager em) throws DBErrorException;
 
-    void deleteBoard(BoardDTO boardDTO, EntityManager em) throws DBErrorException;
+    void deleteBoard(int boardId, EntityManager em) throws DBErrorException;
 }

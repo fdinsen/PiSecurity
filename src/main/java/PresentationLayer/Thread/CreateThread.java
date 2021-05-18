@@ -32,10 +32,10 @@ public class CreateThread extends Command {
             threadFacade.createThread(threadName,threadText,boardId,username);
             request.setAttribute("message", "Thread created");
         }catch (DBErrorException | UserNotFoundException | InvalidInputException e) {
-            request.setAttribute("errMsg", e.getMessage());
+            request.setAttribute("errMessage", e.getMessage());
             return "createThread";
         } catch (Exception e) {
-            request.setAttribute("errMsg", "Something went wrong while creating thread");
+            request.setAttribute("errMessage", "Something went wrong while creating thread");
             return "createThread";
         }
 

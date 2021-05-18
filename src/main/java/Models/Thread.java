@@ -21,11 +21,14 @@ public class Thread implements Serializable{
     @Column(name = "text", unique = false, nullable = false)
     private String text;
 
-    @ManyToOne
+    @Column(name = "views", unique = false, nullable = false,columnDefinition = "int default 0")
+    private int views;
+
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="board_id", nullable=false)
     private Board board;
 
-    @OneToMany(mappedBy="thread",orphanRemoval = true, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy="thread",orphanRemoval = true, cascade = CascadeType.REMOVE,fetch = FetchType.EAGER)
     private List<Post> posts;
 
     @OneToOne(cascade = CascadeType.DETACH)
@@ -74,6 +77,14 @@ public class Thread implements Serializable{
         this.text = text;
     }
 
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -84,10 +95,6 @@ public class Thread implements Serializable{
 
     public List<Post> getPosts() {
         return posts;
-    }
-
-    public void setPosts(List<Post> posts) {
-        this.posts = posts;
     }
 
     public User getCreatedBy() {
@@ -116,9 +123,5 @@ public class Thread implements Serializable{
 
     public Date getUpdatedAt() {
         return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
     }
 }

@@ -21,7 +21,7 @@ public class Board implements Serializable{
     @Column(name = "description", unique = false, nullable = true)
     private String description;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name="category_id", nullable=false)
     private Category category;
 

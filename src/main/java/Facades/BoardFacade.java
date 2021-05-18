@@ -51,7 +51,7 @@ public class BoardFacade implements IBoardFacade {
     public BoardDTO getBoardFromID(int boardId) throws DBErrorException {
         EntityManager em = EMF_Creator.createEntityManagerFactory().createEntityManager();
 
-        //Get category
+        //Get board
         BoardsDaoImpl boardsDaoImpl  = new BoardsDaoImpl();
         BoardDTO boardDTO = boardsDaoImpl.getBoardDTOFromID(boardId,true, em);
 

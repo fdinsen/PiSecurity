@@ -19,11 +19,9 @@ public class CategoryDaoImpl implements ICategoryDao {
     public CategoryDTO createCategory(String name, User user, EntityManager em) throws DBErrorException {
         CategoryDTO categoryDTO = null;
         try{
-            categoryDTO = getCategoryFromName(name, em);
+            categoryDTO = getCategoryFromName(name,false, em);
         }catch (Exception e){
             throw new DBErrorException("Something went wrong while checking if category already exist");
-        }finally {
-            em.close();
         }
 
         if(categoryDTO != null){
@@ -48,7 +46,7 @@ public class CategoryDaoImpl implements ICategoryDao {
     }
 
     @Override
-    public CategoryDTO getCategoryFromName(String catName,EntityManager em) throws DBErrorException {
+    public CategoryDTO getCategoryFromName(String catName,Boolean closeEM,EntityManager em) throws DBErrorException {
         Category category = null;
 
         //find category in db
@@ -63,7 +61,9 @@ public class CategoryDaoImpl implements ICategoryDao {
         } catch (Exception e) {
             throw new DBErrorException("Something went wrong while getting category from category name");
         }finally {
+            if(closeEM){
             em.close();
+            }
         }
     }
 
@@ -132,7 +132,7 @@ public class CategoryDaoImpl implements ICategoryDao {
     @Override
     public List<CategoryDTO> getCategoriesWithBoards(EntityManager em) throws DBErrorException {
         try {
-            TypedQuery<Category> query = em.createQuery("SELECT c FROM Category c LEFT JOIN c.boards b", Category.class);
+            TypedQuery<Category> query = em.createQuery("SELECT c FROM Category c", Category.class);
             List<Category> categories = query.getResultList();
 
 

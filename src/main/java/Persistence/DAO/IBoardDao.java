@@ -23,6 +23,8 @@ public interface IBoardDao {
 
     public Board getBoardFromID(int boardId,Boolean closeEM, EntityManager em) throws DBErrorException;
 
+    public BoardDTO getBoardWithThreads(int boardId, EntityManager em) throws DBErrorException;
+
     public List<BoardDTO> getBoardsForCategory(CategoryDTO categoryDTO, EntityManager em) throws DBErrorException;
 
     void editBoard(BoardDTO boardDTO, String boardName, String description, User user, EntityManager em) throws DBErrorException;

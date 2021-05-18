@@ -21,12 +21,29 @@ public class CategoryDTO {
         this.id = category.getId();
         this.name = category.getName();
         //Boards
-        List<Board> boards = category.getBoards();
-        List<BoardDTO> boardDTOS = new ArrayList<>();
-        for (int i = 0; i < boards.size(); i++) {
-            BoardDTO boardDTO = new BoardDTO(boards.get(i), this);
-            boardDTOS.add(boardDTO);
+        if(category.getBoards() != null) {
+            List<Board> boards = category.getBoards();
+            List<BoardDTO> boardDTOS = new ArrayList<>();
+            for (int i = 0; i < boards.size(); i++) {
+                BoardDTO boardDTO = new BoardDTO(boards.get(i), this);
+                boardDTOS.add(boardDTO);
+            }
+            this.boards = boardDTOS;
         }
+        this.createdBy = new UserDTO(category.getCreatedBy());
+        if(category.getUpdatedBy() != null) {
+            this.updatedBy = new UserDTO(category.getUpdatedBy());
+        }
+        this.createdAt = category.getCreatedAt();
+        this.updatedAt = category.getUpdatedAt();
+    }
+
+    //Used by boards
+    public CategoryDTO(Category category, BoardDTO boardDTO) {
+        this.id = category.getId();
+        this.name = category.getName();
+        List<BoardDTO> boardDTOS = new ArrayList<>();
+        boardDTOS.add(boardDTO);
         this.boards = boardDTOS;
         this.createdBy = new UserDTO(category.getCreatedBy());
         if(category.getUpdatedBy() != null) {

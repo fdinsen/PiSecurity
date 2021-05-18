@@ -7,6 +7,8 @@ import PresentationLayer.Category.ViewCategories;
 import PresentationLayer.Category.CreateCategory;
 import PresentationLayer.Category.DeleteCategory;
 import PresentationLayer.Category.EditCategory;
+import PresentationLayer.Forum.GetBoard;
+import PresentationLayer.Thread.CreateThread;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -34,6 +36,8 @@ public abstract class Command {
         commands.put("adminViewBoardsForCategory", new AdminViewBoardsForCategory(new Role[]{}));
         commands.put("editBoard", new EditBoard(new Role[]{}));
         commands.put("deleteBoard", new DeleteBoard(new Role[]{}));
+        commands.put("getBoard", new GetBoard(new Role[]{}));
+        commands.put("createThread", new CreateThread(new Role[]{}));
     }
 
     public static Command from( HttpServletRequest request ) {

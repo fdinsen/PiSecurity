@@ -39,8 +39,12 @@ public class BoardDTO {
         this.id = board.getId();
         this.name = board.getName();
         this.description = board.getDescription();
-        this.category = new CategoryDTO(board.getCategory());
-        this.threads = threadsToThreadsDTO(board.getThreads(), this);
+        if(board.getCategory() != null) {
+            this.category = new CategoryDTO(board.getCategory(), this);
+        }
+        if(board.getThreads() != null) {
+            this.threads = threadsToThreadsDTO(board.getThreads(), this);
+        }
         this.createdBy = new UserDTO(board.getCreatedBy());
         if(board.getUpdatedBy() != null) {
             this.updatedBy = new UserDTO(board.getUpdatedBy());

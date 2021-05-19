@@ -73,6 +73,25 @@ public class ThreadDaoImpl implements IThreadDao {
             em.close();
         }
     }
+    
+    @Override
+    public void deleteThread(int threadId, EntityManager em) throws DBErrorException {
+        try {
+            //Delete
+            em.getTransaction().begin();
+
+            //Get category from dto
+            Thread thread = getThreadById(threadId,false,false, em);
+
+            em.remove(thread);
+            em.getTransaction().commit();
+            em.close();
+        } catch (Exception e) {
+            throw new DBErrorException("Something went wrong while deleting thread");
+        }finally {
+            em.close();
+        }
+    }
 
     @Override
     public ThreadDTO getThreadDTOById(int threadId, Boolean closeEM, Boolean updateViewCount, EntityManager em) throws DBErrorException {

@@ -9,6 +9,7 @@ import PresentationLayer.Category.DeleteCategory;
 import PresentationLayer.Category.EditCategory;
 import PresentationLayer.Forum.GetBoard;
 import PresentationLayer.Thread.CreateThread;
+import PresentationLayer.Thread.DeleteThread;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,6 +39,7 @@ public abstract class Command {
         commands.put("deleteBoard", new DeleteBoard(new Role[]{Role.admin}));
         commands.put("getBoard", new GetBoard(new Role[]{}));
         commands.put("createThread", new CreateThread(new Role[]{Role.user, Role.moderator, Role.admin}));
+        commands.put("deleteThread", new DeleteThread(new Role[] {Role.user, Role.moderator, Role.admin}));
     }
 
     public static Command from( HttpServletRequest request ) {

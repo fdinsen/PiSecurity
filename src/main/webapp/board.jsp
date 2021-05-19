@@ -21,8 +21,8 @@ This doesn't work. I haven't been able to figure out why.
 
 <%
     /*if (request.getParameter("board") == null) {
-        request.getRequestDispatcher("/FrontController?target=getBoard&boardId=" + request.getParameter("boardId"));
-    }*/
+     request.getRequestDispatcher("/FrontController?target=getBoard&boardId=" + request.getParameter("boardId"));
+     }*/
     new GetBoard(new Role[]{}).execute(request, response);
 %>
 
@@ -142,6 +142,10 @@ This doesn't work. I haven't been able to figure out why.
     <body>
         <script>console.log("${requestScope.board}")</script>
         <jsp:include page="WEB-INF/includes/header.jsp"/>
+        <div class="col-lg text-center" style="">
+            <span style="color:green"><%=(request.getAttribute("msg") == null) ? "" : request.getAttribute("msg")%></span>
+            <span style="color:red"><%=(request.getAttribute("errMessage") == null) ? "" : request.getAttribute("errMessage")%></span>
+        </div>
         <div class="container">
             <main role="main" class="container bg-dark pb-2 rounded">
                 <div class="align-items-center p-3 my-3 text-white-50 bg-purple rounded box-shadow text-center">
@@ -166,6 +170,7 @@ This doesn't work. I haven't been able to figure out why.
                                         <th>Title</th>
                                         <th>Statistics</th>
                                         <th>Last post</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -200,6 +205,20 @@ This doesn't work. I haven't been able to figure out why.
                                                     <small><fmt:formatDate value="${thread.createdAt}"
                                                                     pattern="dd-MM-yyyy HH:mm"/></small>
                                                 </span>
+                                            </td >
+                                            <td td class="footable-visible footable-last-column" align="right">
+                                                <c:if test="${sessionScope.role == 'moderator' || sessionScope.role == 'admin' || thread.createdBy.username == sessionScope.username}">
+                                                    <form name="delete" action="FrontController" method="post">
+                                                        <input type="hidden" name="target" value="deleteThread">
+                                                        <input type="hidden" name="threadId" value="${thread.id}">
+                                                        <button class="btn btn-outline-danger mt-1">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                                                            <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                            </svg>
+                                                            Delete
+                                                        </button>
+                                                    </form>
+                                                </c:if>
                                             </td>
                                         </tr>
                                     </c:forEach>

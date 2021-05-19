@@ -17,6 +17,8 @@ import utils.EMF_Creator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 import static utils.ValidationUtils.*;
 
@@ -31,7 +33,8 @@ public class ThreadFacade implements IThreadFacade {
 
         //Escapes HTML tags
         threadName = StringEscapeUtils.escapeHtml4(threadName);
-        text = StringEscapeUtils.escapeHtml4(text);
+        //text = StringEscapeUtils.escapeHtml4(text);
+        text = Jsoup.clean(text, Whitelist.basicWithImages());
         boardId = StringEscapeUtils.escapeHtml4(boardId);
         createdByUsername = StringEscapeUtils.escapeHtml4(createdByUsername);
 

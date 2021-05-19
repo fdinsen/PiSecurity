@@ -68,7 +68,7 @@
                                         <div class="col-8">
                                             <div class="card mt-4">
                                                 <div class="card-body">
-                                                    <p>${post.text}</p>
+                                                    <c:out value="${post.text}" escapeXml="false" />
                                                 </div>
                                             </div>
                                         </div>

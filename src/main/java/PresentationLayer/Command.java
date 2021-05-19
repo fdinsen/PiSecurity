@@ -27,17 +27,17 @@ public abstract class Command {
         commands.put("logout", new Logout(new Role[]{}));
         commands.put("register", new Register(new Role[]{}));
         commands.put("resend", new ResendActivationEmail(new Role[]{Role.unverified}));
-        commands.put("createCategory", new CreateCategory(new Role[]{}));
-        commands.put("viewCategories", new ViewCategories(new Role[]{}));
-        commands.put("editCategory", new EditCategory(new Role[]{}));
-        commands.put("deleteCategory", new DeleteCategory(new Role[]{}));
-        commands.put("getCreateBoard", new GetCreateBoard(new Role[]{}));
-        commands.put("createBoard", new CreateBoard(new Role[]{}));
-        commands.put("adminViewBoardsForCategory", new AdminViewBoardsForCategory(new Role[]{}));
-        commands.put("editBoard", new EditBoard(new Role[]{}));
-        commands.put("deleteBoard", new DeleteBoard(new Role[]{}));
+        commands.put("createCategory", new CreateCategory(new Role[]{Role.admin}));
+        commands.put("viewCategories", new ViewCategories(new Role[]{Role.admin}));
+        commands.put("editCategory", new EditCategory(new Role[]{Role.admin}));
+        commands.put("deleteCategory", new DeleteCategory(new Role[]{Role.admin}));
+        commands.put("getCreateBoard", new GetCreateBoard(new Role[]{Role.admin}));
+        commands.put("createBoard", new CreateBoard(new Role[]{Role.admin}));
+        commands.put("adminViewBoardsForCategory", new AdminViewBoardsForCategory(new Role[]{Role.admin}));
+        commands.put("editBoard", new EditBoard(new Role[]{Role.admin}));
+        commands.put("deleteBoard", new DeleteBoard(new Role[]{Role.admin}));
         commands.put("getBoard", new GetBoard(new Role[]{}));
-        commands.put("createThread", new CreateThread(new Role[]{}));
+        commands.put("createThread", new CreateThread(new Role[]{Role.user, Role.moderator, Role.admin}));
     }
 
     public static Command from( HttpServletRequest request ) {

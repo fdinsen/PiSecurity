@@ -14,7 +14,7 @@ import java.util.List;
 public interface ICategoryDao {
     public CategoryDTO createCategory(String name, User user, EntityManager em) throws DBErrorException, UserNotFoundException;
 
-    public CategoryDTO getCategoryFromName(String catName,EntityManager em) throws DBErrorException;
+    public CategoryDTO getCategoryFromName(String catName,Boolean closeEM, EntityManager em) throws DBErrorException;
 
     public CategoryDTO getCategoryDTOFromID(int catId,EntityManager em) throws DBErrorException;
 

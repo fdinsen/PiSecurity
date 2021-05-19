@@ -12,6 +12,7 @@ public class ThreadDTO {
     private int id;
     private String name;
     private String text;
+    private int views;
     private BoardDTO board;
     private List<PostDTO> posts;
     private UserDTO createdBy;
@@ -23,6 +24,7 @@ public class ThreadDTO {
         this.id = thread.getId();
         this.name = thread.getName();
         this.text = thread.getText();
+        this.views = thread.getViews();
         this.posts = postToPostDTO(thread.getPosts(), this);
         this.createdBy = new UserDTO(thread.getCreatedBy());
         if(thread.getUpdatedBy() != null) {
@@ -36,8 +38,11 @@ public class ThreadDTO {
         this.id = thread.getId();
         this.name = thread.getName();
         this.text = thread.getText();
+        this.views = thread.getViews();
         this.board = boardDTO;
-        this.posts = postToPostDTO(thread.getPosts(), this);
+        if(thread.getPosts() != null) {
+            this.posts = postToPostDTO(thread.getPosts(), this);
+        }
         this.createdBy = new UserDTO(thread.getCreatedBy());
         if(thread.getUpdatedBy() != null) {
             this.updatedBy = new UserDTO(thread.getUpdatedBy());
@@ -127,5 +132,13 @@ public class ThreadDTO {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int getViews() {
+        return views;
+    }
+
+    public void setViews(int views) {
+        this.views = views;
     }
 }

@@ -16,6 +16,8 @@ import Facades.BoardFacade;
 import Facades.CategoryFacade;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
 
 import javax.persistence.EntityManager;
 
@@ -105,28 +107,18 @@ public class ValidationUtils {
         }
     }
 
-    public static BoardDTO boardIdStringValidation(String boardIDString) throws InvalidInputException {
-        if(StringUtils.isBlank(boardIDString)){
-            throw new InvalidInputException("Board id must be set and not be only whitespace");
+    public static int idStringValidation(String IDString) throws InvalidInputException {
+        if(StringUtils.isBlank(IDString)){
+            throw new InvalidInputException("Id must be set and not be only whitespace");
         }
 
-        int boardIdInt;
+        int IdInt;
         try{
-            boardIdInt = Integer.parseInt(boardIDString);
+            IdInt = Integer.parseInt(IDString);
         }catch(Exception e){
-            throw new InvalidInputException("Board ID must be a integer");
+            throw new InvalidInputException("ID must be a integer");
         }
-
-        //Get board
-        try{
-            BoardFacade boardFacade  = new BoardFacade();
-            BoardDTO board = boardFacade.getBoardFromID(boardIdInt);
-            return board;
-        }catch (DBErrorException e) {
-            throw new InvalidInputException(e.getMessage());
-        }catch (Exception e){
-            throw new InvalidInputException("Something went wrong while getting board from DB");
-        }
+        return IdInt;
     }
 
     public static void boardDescriptionValidation(String boardDescription) throws InvalidInputException {
@@ -137,5 +129,27 @@ public class ValidationUtils {
         if (!inputShorterThanMaxLength(boardDescription, 150) || !inputLongerThanMinLength(boardDescription, 10) ) {
             throw new InvalidInputException("Board description must be at between 10-150 chars");
         }
+    }
+
+    public static void threadNameValidation(String threadName) throws InvalidInputException {
+        if(StringUtils.isBlank(threadName)){
+            throw new InvalidInputException("Thread name must be set and not be only whitespace");
+        }
+
+        if (!inputShorterThanMaxLength(threadName, 50) || !inputLongerThanMinLength(threadName, 4) ) {
+            throw new InvalidInputException("Thread name must be at between 4-50 chars");
+        }
+    }
+
+    public static String threadTextValidation(String text) throws InvalidInputException {
+        if(StringUtils.isBlank(text)){
+            throw new InvalidInputException("Text name must be set and not be only whitespace");
+        }
+
+        if (!inputShorterThanMaxLength(text, 10000) || !inputLongerThanMinLength(text, 30) ) {
+            throw new InvalidInputException("Thread text must be at between 30-10000 chars");
+        }
+
+        return Jsoup.clean(text, Whitelist.basicWithImages());
     }
 }

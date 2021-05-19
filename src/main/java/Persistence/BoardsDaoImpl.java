@@ -84,40 +84,17 @@ public class BoardsDaoImpl implements IBoardDao {
 
     @Override
     public BoardDTO getBoardDTOFromID(int boardId,Boolean closeEM, EntityManager em) throws DBErrorException {
-        //Check if already exist
-        Board board = null;
-
-        //find board in db
-        try {
-            TypedQuery<Board> query = em.createQuery("SELECT b FROM Board b WHERE b.id = :boardId", Board.class);
-            query.setParameter("boardId", boardId);
-            board = query.getSingleResult();
-
-            BoardDTO boardDTO = new BoardDTO(board);
-
-            return boardDTO;
-        } catch (NoResultException nre){
-            return null;
-        }
-        catch (Exception e) {
-            throw new DBErrorException("Something went wrong while getting board from board id");
-        }finally {
-            if(closeEM){
-                em.close();
-            }
-        }
+        Board board = getBoardFromID(boardId,closeEM,em);
+        return new BoardDTO(board);
     }
 
     @Override
     public Board getBoardFromID(int boardId,Boolean closeEM, EntityManager em) throws DBErrorException {
-        //Check if already exist
-        Board board = null;
-
         //find board in db
         try {
             TypedQuery<Board> query = em.createQuery("SELECT b FROM Board b WHERE b.id = :boardId", Board.class);
             query.setParameter("boardId", boardId);
-            board = query.getSingleResult();
+            Board board = query.getSingleResult();
             return board;
         } catch (NoResultException nre){
             return null;
@@ -129,6 +106,25 @@ public class BoardsDaoImpl implements IBoardDao {
                 em.close();
             }
 
+        }
+    }
+
+    @Override
+    public BoardDTO getBoardWithThreads(int boardId, EntityManager em) throws DBErrorException {
+        //find board in db
+        try {
+            TypedQuery<Board> query = em.createQuery("SELECT b FROM Board b LEFT JOIN b.threads t WHERE b.id = :boardId ", Board.class);
+            query.setParameter("boardId", boardId);
+            Board board = query.getSingleResult();
+
+            return new BoardDTO(board);
+        } catch (NoResultException nre){
+            return null;
+        }
+        catch (Exception e) {
+            throw new DBErrorException("Something went wrong while getting board and threads from board id");
+        }finally {
+                em.close();
         }
     }
 
@@ -157,11 +153,11 @@ public class BoardsDaoImpl implements IBoardDao {
     }
 
     @Override
-    public void editBoard(BoardDTO boardDTO, String boardName, String description, User user, EntityManager em) throws DBErrorException {
+    public void editBoard(int boardId, String boardName, String description, User user, EntityManager em) throws DBErrorException {
         try {
             em.getTransaction().begin();
             //Get category from dto
-            Board board = getBoardFromID(boardDTO.getId(),false, em);
+            Board board = getBoardFromID(boardId,false, em);
 
             board.setName(boardName);
             board.setDescription(description);
@@ -176,13 +172,13 @@ public class BoardsDaoImpl implements IBoardDao {
     }
 
     @Override
-    public void deleteBoard(BoardDTO boardDTO, EntityManager em) throws DBErrorException {
+    public void deleteBoard(int boardId, EntityManager em) throws DBErrorException {
         try {
             //Delete
             em.getTransaction().begin();
 
             //Get category from dto
-            Board board = getBoardFromID(boardDTO.getId(),false, em);
+            Board board = getBoardFromID(boardId, false, em);
 
             em.remove(board);
             em.getTransaction().commit();

@@ -19,10 +19,12 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import static utils.ValidationUtils.*;
 
 public class CreateBoard extends Command {
+
     public CreateBoard(Role[] rolesAllowed) {
         super(rolesAllowed);
     }
@@ -32,21 +34,23 @@ public class CreateBoard extends Command {
         String catIdString = request.getParameter("catId");
         request.setAttribute("catId", catIdString);
 
-        try{
+        try {
             String boardName = request.getParameter("name");
             String description = request.getParameter("description");
             String categoryIdString = request.getParameter("categoryId");
             HttpSession session = request.getSession();
-            String username = (String)session.getAttribute("username");
+            String username = (String) session.getAttribute("username");
 
             BoardFacade boardFacade = new BoardFacade();
-            boardFacade.createBoard(boardName,description,categoryIdString,username);
+            boardFacade.createBoard(boardName, description, categoryIdString, username);
             request.setAttribute("message", "Board created");
-        }catch (DBErrorException | UserNotFoundException | InvalidInputException e) {
+        } catch (DBErrorException | UserNotFoundException | InvalidInputException e) {
             request.setAttribute("errMsg", e.getMessage());
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not create board");
             return "createBoard";
         } catch (Exception e) {
             request.setAttribute("errMsg", "Something went wrong while creating board");
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not create board");
             return "createBoard";
         }
 

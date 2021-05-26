@@ -12,6 +12,7 @@ import Models.Role;
 import Facades.Interfaces.ILoginFacade;
 import Facades.LoginFacade;
 import java.io.IOException;
+import org.apache.log4j.Logger;
 import utils.ValidationUtils;
 import utils.VerifyRecaptcha;
 
@@ -86,6 +87,8 @@ public class Login extends Command {
         } catch (NullPointerException e1) {
             e1.printStackTrace();
             request.setAttribute("errMessage", "Username or password is incorrect.");
+            Logger.getLogger(this.getClass().getName()).warn("Login failed with email " + email);
+                    
             return "login";
         }
     }

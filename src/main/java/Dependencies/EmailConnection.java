@@ -8,8 +8,8 @@ package Dependencies;
 import Models.EmailParams;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 import sendinblue.ApiClient;
 import sendinblue.ApiException;
 import sendinblue.Configuration;
@@ -54,6 +54,7 @@ public class EmailConnection implements IEmailConnection {
             result = api.sendTransacEmail(send);
             System.out.println(result);
         } catch (ApiException ex) {
+            Logger.getLogger(this.getClass().getName()).error("Activation email was not sent successfully to " + email + ", " + ex.getLocalizedMessage());
             ex.printStackTrace();
         }
     }
@@ -73,6 +74,7 @@ public class EmailConnection implements IEmailConnection {
             account = result;
             System.out.println(result);
         } catch (ApiException e) {
+            Logger.getLogger("EmailConnection").error("Email connection could not be set up");
             System.err.println("Exception when calling AccountApi#getAccount");
             e.printStackTrace();
         }

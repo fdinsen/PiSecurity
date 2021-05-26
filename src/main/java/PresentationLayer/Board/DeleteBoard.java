@@ -11,8 +11,10 @@ import PresentationLayer.Command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class DeleteBoard extends Command {
+
     public DeleteBoard(Role[] rolesAllowed) {
         super(rolesAllowed);
     }
@@ -23,15 +25,17 @@ public class DeleteBoard extends Command {
         String boardIdString = request.getParameter("boardId");
 
         //Delete
-        try{
+        try {
             BoardFacade boardFacade = new BoardFacade();
             boardFacade.deleteBoard(boardIdString);
 
             request.setAttribute("catId", catIdString);
             request.setAttribute("message", "Board deleted");
-        }catch (DBErrorException | InvalidInputException e) {
+        } catch (DBErrorException | InvalidInputException e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not delete board");
             request.setAttribute("errMsg", e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not delete board");
             request.setAttribute("errMsg", "Something went wrong while deleting board");
         }
 

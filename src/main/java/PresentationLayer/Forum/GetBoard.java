@@ -10,6 +10,7 @@ import PresentationLayer.Command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class GetBoard extends Command {
 
@@ -27,8 +28,10 @@ public class GetBoard extends Command {
             BoardDTO boardDTO = forumFacade.getBoardWithThreads(boardIdString);
             request.setAttribute("board", boardDTO);
         }catch (DBErrorException e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get board");
             request.setAttribute("errMessage", e.getMessage());
         }catch (Exception e){
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get board");
             request.setAttribute("errMessage", "Something went wrong while getting board and threads");
         }
 

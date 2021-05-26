@@ -13,11 +13,9 @@ import Persistence.BoardsDaoImpl;
 import Persistence.DAO.IThreadDao;
 import Persistence.ThreadDaoImpl;
 import Persistence.UserDaoImpl;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.EMF_Creator;
-
+import org.apache.log4j.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import org.jsoup.Jsoup;
@@ -77,6 +75,7 @@ public class ThreadFacade implements IThreadFacade {
             IThreadDao dao = new ThreadDaoImpl();
             dao.deleteThread(threadId, em);
         } catch (DBErrorException ex) {
+            Logger.getLogger(this.getClass().getName()).error("Could not delete thread " + threadId);
             //TODO log error
         }
     }
@@ -91,6 +90,7 @@ public class ThreadFacade implements IThreadFacade {
                 return thread.getCreatedBy().getUsername().equals(username);
             }
         } catch (DBErrorException ex) {
+            Logger.getLogger(this.getClass().getName()).error("Could not get thread " + threadId);
             //TODO log error
         }finally {
             em.close();

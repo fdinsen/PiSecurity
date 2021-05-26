@@ -10,4 +10,6 @@ import javax.persistence.EntityManager;
  */
 public interface UserDao {
     public User getUserFromUsername(String username, EntityManager em) throws DBErrorException, UserNotFoundException;
+
+    public String updateProfilePicture(String profilePicture, String username, EntityManager em) throws DBErrorException, UserNotFoundException;
 }

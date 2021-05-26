@@ -38,7 +38,7 @@
                         <div class="card-body" align="center">
                             <div class="container">
 
-                                <div id="title" class="row card mt-4" align="left"> <!--TITLE START-->
+                                <div id="title" class="row card mt-4" align="left">
                                     <div class="card-body">
                                         <h5 class="display-5" align="left">${requestScope.thread.name}</h5>
                                     </div>
@@ -47,7 +47,7 @@
                                 <div class="row" align="left"> <!--POST START-->
                                     <div class="col-2 mt-4">
                                         <p>${requestScope.thread.createdBy.username}</p>
-                                        <img src="https://www.mico.dk/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png" style="width: 8rem;">
+                                        <jsp:include page="WEB-INF/includes/profilePicture.jsp"/>
                                     </div>
                                     <div class="col-10">
                                         <div class="card mt-4">

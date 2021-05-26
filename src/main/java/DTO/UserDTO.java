@@ -9,12 +9,14 @@ public class UserDTO {
     private UUID id;
     private String email;
     private String username;
+    private String profilePicture;
     private Role role;
 
     public UserDTO(User user) {
         this.id = user.getId();
         this.email = user.getEmail();
         this.username = user.getUsername();
+        this.profilePicture = user.getProfilePicture();
         this.role = user.getRole();
     }
 
@@ -49,5 +51,12 @@ public class UserDTO {
     public void setUsername(String username) {
         this.username = username;
     }
-    
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }

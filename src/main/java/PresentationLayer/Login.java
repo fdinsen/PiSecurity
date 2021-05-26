@@ -50,6 +50,7 @@ public class Login extends Command {
             session.setAttribute("role", validatedUser.getRole().toString());
             session.setAttribute("username", validatedUser.getUsername());
             session.setAttribute("email", validatedUser.getEmail());
+            session.setAttribute("profilePicture", validatedUser.getProfilePicture());
             request.setAttribute("userName", validatedUser.getUsername());
 
             //TODO remove following if statements when deleting admin/editor/user test pages

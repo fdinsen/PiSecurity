@@ -17,9 +17,13 @@ public class User implements Serializable{
     private String username;
     @Column(name = "email", unique = true, nullable = false)
     private String email;
+
     @Column(name = "password", nullable = false)
     private String password;
-    
+
+    @Column(name = "profile_picture",unique = true)
+    private String profilePicture;
+
     @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -73,5 +77,12 @@ public class User implements Serializable{
     public void setRole(Role role) {
         this.role = role;
     }
-    
+
+    public String getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(String profilePicture) {
+        this.profilePicture = profilePicture;
+    }
 }

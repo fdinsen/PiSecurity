@@ -18,6 +18,8 @@ public interface IThreadDao {
     public void updateThread(ThreadDTO threadDTO, User user, EntityManager em) throws DBErrorException;
 
     public void deleteThread(ThreadDTO threadDTO, EntityManager em) throws DBErrorException;
+    
+    public void deleteThread(int threadId, EntityManager em) throws DBErrorException;
 
     public ThreadDTO getThreadDTOById(int Id,Boolean closeEM, Boolean updateViewCount, EntityManager em) throws DBErrorException;
 

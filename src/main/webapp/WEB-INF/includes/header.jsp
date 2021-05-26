@@ -29,8 +29,14 @@
                 <a href="register.jsp"><button class="btn btn-primary">Sign up</button></a>
                 <% } else {%>
                 <span class="navbar-text" style="color: white">
-                    <%=session.getAttribute("username")%>
+                    <a href="profile.jsp"><%=session.getAttribute("username")%></a>
                 </span>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="FrontController?target=logout">Logout</a></li>
+                </ul>
                 <% }%>
             </div>
             <%} else {%>
@@ -39,12 +45,7 @@
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Welcome, <%= (request.getSession(true).getAttribute("username"))%>
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="FrontController?target=logout">Logout</a></li>
-                    </ul>
+
                 </li>
             </ul>
             <%} %>

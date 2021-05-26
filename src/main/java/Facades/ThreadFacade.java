@@ -8,10 +8,13 @@ import Exceptions.InvalidInputException;
 import Exceptions.UserNotFoundException;
 import Facades.Interfaces.IThreadFacade;
 import Models.User;
+import Models.Thread;
 import Persistence.BoardsDaoImpl;
 import Persistence.DAO.IThreadDao;
 import Persistence.ThreadDaoImpl;
 import Persistence.UserDaoImpl;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.text.StringEscapeUtils;
 import utils.EMF_Creator;
 
@@ -66,4 +69,33 @@ public class ThreadFacade implements IThreadFacade {
         IThreadDao threadDao = new ThreadDaoImpl();
         return threadDao.getThreadDTOById(threadIdInt, true, true, em);
     }
+
+    @Override
+    public void deleteThread(int threadId) {
+        EntityManager em = EMF.createEntityManager();
+        try {
+            IThreadDao dao = new ThreadDaoImpl();
+            dao.deleteThread(threadId, em);
+        } catch (DBErrorException ex) {
+            //TODO log error
+        }
+    }
+
+    @Override
+    public boolean isThreadOwnedByUser(int threadId, String username) {
+        EntityManager em = EMF.createEntityManager();
+        try {
+            IThreadDao dao = new ThreadDaoImpl();
+            Thread thread = dao.getThreadById(threadId, false, false, em);
+            if(thread != null) {
+                return thread.getCreatedBy().getUsername().equals(username);
+            }
+        } catch (DBErrorException ex) {
+            //TODO log error
+        }finally {
+            em.close();
+        }
+        return false;
+    }
+    
 }

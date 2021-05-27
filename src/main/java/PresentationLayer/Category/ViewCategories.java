@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class ViewCategories extends Command {
 
@@ -28,8 +29,10 @@ public class ViewCategories extends Command {
             List<CategoryDTO> categories = categoryFacade.getAllCategories();
             request.setAttribute("categories", categories);
         }catch (DBErrorException e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get categories");
             request.setAttribute("errMsg", e.getMessage());
         }catch (Exception e){
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get categories");
             request.setAttribute("errMsg", "Something went wrong while getting categories from DB");
             return "index";
         }

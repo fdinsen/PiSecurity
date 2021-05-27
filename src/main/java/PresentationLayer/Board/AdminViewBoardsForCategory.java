@@ -10,6 +10,7 @@ import PresentationLayer.Command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 
 public class AdminViewBoardsForCategory extends Command {
@@ -28,8 +29,10 @@ public class AdminViewBoardsForCategory extends Command {
             request.setAttribute("catId", catIdString);
             request.setAttribute("boards", boardDTOS);
         }catch (DBErrorException | InvalidInputException e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get boards in category");
             request.setAttribute("errMsg", e.getMessage());
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get boards in category");
             request.setAttribute("errMsg", "Something went wrong while getting boards for category");
         }
 

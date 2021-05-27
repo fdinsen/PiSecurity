@@ -14,6 +14,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
 /**
  *
@@ -62,6 +64,7 @@ public class FrontController extends HttpServlet {
         if(action.isUserAllowed(request)) {
             return action;
         }
+        Logger.getLogger(FrontController.class).warn("User " + request.getAttribute("email") + " attempted to access unauthorised command " + action.getClass().getName());
         return null;
     }
 

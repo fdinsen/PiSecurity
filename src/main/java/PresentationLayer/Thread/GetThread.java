@@ -13,6 +13,7 @@ import Models.Role;
 import PresentationLayer.Command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -35,8 +36,10 @@ public class GetThread extends Command {
             request.setAttribute("thread", threadDTO);
             return "thread";
         } catch (DBErrorException e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get thread");
             request.setAttribute("errMsg", e.getMessage());
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get thread");
             request.setAttribute("errMsg", "Something went wrong while getting board and threads");
         }
         return "thread";

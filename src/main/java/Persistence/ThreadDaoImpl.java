@@ -11,6 +11,7 @@ import Persistence.DAO.IThreadDao;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
+import org.apache.log4j.Logger;
 
 public class ThreadDaoImpl implements IThreadDao {
 
@@ -30,6 +31,7 @@ public class ThreadDaoImpl implements IThreadDao {
 
             return thread.getId();
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not create thread " + name + " by user " + user.getEmail());
             throw new DBErrorException("Something went wrong while creating thread in DB");
         }finally {
             em.close();
@@ -49,6 +51,7 @@ public class ThreadDaoImpl implements IThreadDao {
             em.persist(thread);
             em.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not update thread " + threadDTO.getName() + " by user "+ user.getEmail());
             throw new DBErrorException("Something went wrong while editing thread");
         }finally {
             em.close();
@@ -68,6 +71,7 @@ public class ThreadDaoImpl implements IThreadDao {
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not delete thread " + threadDTO.getName());
             throw new DBErrorException("Something went wrong while deleting thread");
         }finally {
             em.close();
@@ -87,6 +91,7 @@ public class ThreadDaoImpl implements IThreadDao {
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not delete thread " + threadId);
             throw new DBErrorException("Something went wrong while deleting thread");
         }finally {
             em.close();
@@ -114,6 +119,7 @@ public class ThreadDaoImpl implements IThreadDao {
             return null;
         }
         catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get thread with id " + threadId);
             throw new DBErrorException("Something went wrong while getting thread from thread id");
         }finally {
             if(closeEM){
@@ -136,6 +142,7 @@ public class ThreadDaoImpl implements IThreadDao {
             return null;
         }
         catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get thread " + threadId);
             throw new DBErrorException("Something went wrong while getting board and threads from board id");
         }finally {
             em.close();

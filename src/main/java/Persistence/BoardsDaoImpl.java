@@ -8,28 +8,27 @@ import Models.Board;
 import Models.Category;
 import Models.User;
 import Persistence.DAO.IBoardDao;
-
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class BoardsDaoImpl implements IBoardDao {
-
 
     @Override
     public void createBoard(String name, String description, CategoryDTO categoryDTO, User createdBy, EntityManager em) throws DBErrorException, UserNotFoundException {
         BoardDTO boardDTO = null;
-        try{
-            boardDTO = getBoardFromName(name,false, em);
-        }catch (Exception e){
+        try {
+            boardDTO = getBoardFromName(name, false, em);
+        } catch (Exception e) {
             em.close();
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not create board " + name + ", by user " + createdBy.getEmail());
             throw new DBErrorException("Something went wrong while checking if board already exist");
         }
 
-
-        if(boardDTO != null){
+        if (boardDTO != null) {
             em.close();
             throw new DBErrorException("Category already exist");
         }
@@ -42,7 +41,7 @@ public class BoardsDaoImpl implements IBoardDao {
 
             //Get category
             CategoryDaoImpl categoryDao = new CategoryDaoImpl();
-            Category category = categoryDao.getCategoryFromID(categoryDTO.getId(),false, em);
+            Category category = categoryDao.getCategoryFromID(categoryDTO.getId(), false, em);
             board.setCategory(category);
 
             board.setCreatedBy(createdBy);
@@ -51,8 +50,9 @@ public class BoardsDaoImpl implements IBoardDao {
             em.persist(board);
             em.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not create board " + name + ", by user " + createdBy.getEmail());
             throw new DBErrorException("Something went wrong while creating board in DB");
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -71,38 +71,38 @@ public class BoardsDaoImpl implements IBoardDao {
             BoardDTO boardDTO = new BoardDTO(board);
 
             return boardDTO;
-        } catch (NoResultException nre){
+        } catch (NoResultException nre) {
             return null;
         } catch (Exception e) {
             throw new DBErrorException("Something went wrong while getting board from board name");
         } finally {
-            if(closeEM){
-            em.close();
+            if (closeEM) {
+                em.close();
             }
         }
     }
 
     @Override
-    public BoardDTO getBoardDTOFromID(int boardId,Boolean closeEM, EntityManager em) throws DBErrorException {
-        Board board = getBoardFromID(boardId,closeEM,em);
+    public BoardDTO getBoardDTOFromID(int boardId, Boolean closeEM, EntityManager em) throws DBErrorException {
+        Board board = getBoardFromID(boardId, closeEM, em);
         return new BoardDTO(board);
     }
 
     @Override
-    public Board getBoardFromID(int boardId,Boolean closeEM, EntityManager em) throws DBErrorException {
+    public Board getBoardFromID(int boardId, Boolean closeEM, EntityManager em) throws DBErrorException {
         //find board in db
         try {
             TypedQuery<Board> query = em.createQuery("SELECT b FROM Board b WHERE b.id = :boardId", Board.class);
             query.setParameter("boardId", boardId);
             Board board = query.getSingleResult();
             return board;
-        } catch (NoResultException nre){
+        } catch (NoResultException nre) {
             return null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get board with id " + boardId);
             throw new DBErrorException("Something went wrong while getting board from board id");
-        }finally {
-            if(closeEM){
+        } finally {
+            if (closeEM) {
                 em.close();
             }
 
@@ -118,13 +118,13 @@ public class BoardsDaoImpl implements IBoardDao {
             Board board = query.getSingleResult();
 
             return new BoardDTO(board);
-        } catch (NoResultException nre){
+        } catch (NoResultException nre) {
             return null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get board with id " + boardId);
             throw new DBErrorException("Something went wrong while getting board and threads from board id");
-        }finally {
-                em.close();
+        } finally {
+            em.close();
         }
     }
 
@@ -142,12 +142,12 @@ public class BoardsDaoImpl implements IBoardDao {
                 boardDTOS.add(new BoardDTO(boards.get(i)));
             }
             return boardDTOS;
-        } catch (NoResultException nre){
+        } catch (NoResultException nre) {
             return null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get boards with in category  " + categoryDTO.getName());
             throw new DBErrorException("Something went wrong while getting boards for category");
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -157,7 +157,7 @@ public class BoardsDaoImpl implements IBoardDao {
         try {
             em.getTransaction().begin();
             //Get category from dto
-            Board board = getBoardFromID(boardId,false, em);
+            Board board = getBoardFromID(boardId, false, em);
 
             board.setName(boardName);
             board.setDescription(description);
@@ -165,8 +165,9 @@ public class BoardsDaoImpl implements IBoardDao {
             em.persist(board);
             em.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not edit board with id " + boardId);
             throw new DBErrorException("Something went wrong while updating board in DB");
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -184,8 +185,9 @@ public class BoardsDaoImpl implements IBoardDao {
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not delete board with id " + boardId);
             throw new DBErrorException("Something went wrong while deleting board");
-        }finally {
+        } finally {
             em.close();
         }
     }

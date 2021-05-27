@@ -17,6 +17,7 @@ import javax.persistence.EntityManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 import static utils.ValidationUtils.categoryIdStringValidation;
 import static utils.ValidationUtils.categoryNameValidation;
@@ -46,8 +47,10 @@ public class EditCategory extends Command {
             Boolean beginEdit = categoryFacade.editCategory(catIdString,categoryName,username,beginEditString);
             request.setAttribute("editing", beginEdit);
         } catch (UserNotFoundException | InvalidInputException | DBErrorException e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not edit category");
             request.setAttribute("errMsg", e.getMessage());
         } catch (Exception e){
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not edit category");
             request.setAttribute("errMsg", "Something went wrong while updating category");
         }
         return "viewCategories";

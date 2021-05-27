@@ -47,9 +47,11 @@ public class DeleteThread extends Command {
                 facade.deleteThread(threadId);
                 request.setAttribute("errMessage", "Thread " + threadId + " deleted.");
             }else {
+                org.apache.log4j.Logger.getLogger(this.getClass().getName()).warn("User " + username + " is not authorized to delete thread!");
                 request.setAttribute("errMessage", "You are not authorized to delete this thread.");
             }
         } catch (InvalidInputException ex) {
+            org.apache.log4j.Logger.getLogger(this.getClass().getName()).error("Database error, could not delete thread");
             Logger.getLogger(DeleteThread.class.getName()).log(Level.SEVERE, null, ex);
             request.setAttribute("errMessage", "Something went wrong while deleting thread");
         }

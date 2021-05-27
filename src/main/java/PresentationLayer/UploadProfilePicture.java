@@ -12,8 +12,8 @@ import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.*;
 import org.apache.commons.fileupload.servlet.*;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.log4j.Logger;
 import utils.ImageSanitizer;
 import utils.ValidationUtils;
 
@@ -28,6 +28,7 @@ import java.util.UUID;
 public class UploadProfilePicture extends Command {
 
     File newFile = null;
+    File oldPicture = null;
     File tmpFile = null;
     Path tmpPath = null;
 
@@ -40,7 +41,8 @@ public class UploadProfilePicture extends Command {
         boolean isMultipart = ServletFileUpload.isMultipartContent(request);
 
         if(!isMultipart){
-            request.setAttribute("errMsg", "Something went wrong while uploading profile picture");
+            request.setAttribute("errMsg", "Something went wrong while uploading profile picture 1");
+            Logger.getLogger(this.getClass().getName()).error("IP: " + request.getRemoteAddr()  + " - request is not a multipart upload request");
             return "profile";
         }
 
@@ -59,12 +61,14 @@ public class UploadProfilePicture extends Command {
             items = upload.parseRequest(request);
         } catch (FileUploadException e) {
             request.setAttribute("errMsg", e.getMessage());
+            Logger.getLogger(this.getClass().getName()).error("IP: " + request.getRemoteAddr()  + " - Something went wrong while parsing request, error: " + e.getMessage());
             return "profile";
         }
 
         //Only 1 item
         if(items.size() != 1){
-            request.setAttribute("errMsg", "Something went wrong while uploading profile picture");
+            request.setAttribute("errMsg", "Something went wrong while uploading profile picture 2");
+            Logger.getLogger(this.getClass().getName()).error("IP: " + request.getRemoteAddr()  +  " - request does not contain exactly 1 form item, items: " + items.size());
             return "profile";
         }
 
@@ -73,7 +77,8 @@ public class UploadProfilePicture extends Command {
 
         //The item should not be a FormField
         if (item.isFormField()) {
-            request.setAttribute("errMsg", "Something went wrong while uploading profile picture");
+            request.setAttribute("errMsg", "Something went wrong while uploading profile picture 3");
+            Logger.getLogger(this.getClass().getName()).error("IP: " + request.getRemoteAddr()  + " - the FileItem is a form field");
             return "profile";
         }
 
@@ -81,12 +86,14 @@ public class UploadProfilePicture extends Command {
         ValidationUtils validationUtils = new ValidationUtils();
         if(!validationUtils.isPNGExtension(item.getName())){
             request.setAttribute("errMsg", "File must be of type png");
+            Logger.getLogger(this.getClass().getName()).error("IP: " + request.getRemoteAddr()  + " - uploaded file did not pass isPNGExtension validation, filename: " + item.getName());
             return "profile";
         }
 
         //Checks item contentType
         if(!item.getContentType().equals("image/png")){
             request.setAttribute("errMsg", "File must be of type png");
+            Logger.getLogger(this.getClass().getName()).error("IP: " + request.getRemoteAddr()  + " - Content type is not image/png, contentType: " + item.getContentType());
             return "profile";
         }
 
@@ -109,6 +116,8 @@ public class UploadProfilePicture extends Command {
             if(!isSafe){
                 request.setAttribute("errMsg", "Not a valid png file");
                 safelyRemoveFile(tmpPath);
+
+                Logger.getLogger(this.getClass().getName()).error("IP: " + request.getRemoteAddr()  + " - uploaded a file that did not pass the imageSanitizer");
                 return "profile";
             }
 
@@ -119,7 +128,8 @@ public class UploadProfilePicture extends Command {
 
             request.setAttribute("msg", "Profile picture uploaded");
         } catch (Exception e) {
-            request.setAttribute("errMsg", "Something went wrong while uploading profile picture");
+            Logger.getLogger(this.getClass().getName()).error("IP: " + request.getRemoteAddr()  + " - Something went wrong while validating and creating uploaded file, error: " + e.getMessage());
+            request.setAttribute("errMsg", "Something went wrong while uploading profile picture, error: " + e.getMessage());
         }
         finally {
             safelyRemoveFile(tmpPath);
@@ -132,7 +142,8 @@ public class UploadProfilePicture extends Command {
             setPermission(newFile);
         } catch (Exception e) {
             safelyRemoveFile(newFile.toPath());
-            request.setAttribute("errMsg", "Something went wrong while uploading profile picture");
+            request.setAttribute("errMsg", "Something went wrong while uploading profile picture 4");
+            Logger.getLogger(this.getClass().getName()).error("IP: " + request.getRemoteAddr()  + " - Something went wrong while setting file permissions, error: " + e.getMessage());
             return "profile";
         }
 
@@ -147,17 +158,17 @@ public class UploadProfilePicture extends Command {
             String oldPictureFilename = userFacade.updateProfilePicture(filename, username);
 
             //Delete old profile picture
-            File oldPicture = new File(System.getProperty("user.dir")  + File.separator +  "uploads" +  File.separator + oldPictureFilename);
+            oldPicture = new File(System.getProperty("user.dir")  + File.separator +  "uploads" +  File.separator + oldPictureFilename);
             FileUtils.forceDelete(oldPicture);
             //safelyRemoveFile(oldPicture.toPath());
 
         } catch (UserNotFoundException | DBErrorException e) {
             File picture = new File(System.getProperty("user.dir")  + File.separator +  "uploads" +  File.separator + filename);
             safelyRemoveFile(picture.toPath());
-
-            request.setAttribute("errMsg", "Something went wrong while uploading profile picture");
+            Logger.getLogger(this.getClass().getName()).warn("IP: " + request.getRemoteAddr()  + " - Something went updating profile picture in db, error: " + e.getMessage());
+            request.setAttribute("errMsg", "Something went wrong while uploading profile picture 5");
         }catch (IOException e){
-            //TODO log when old profile picture cannot be deleted
+            Logger.getLogger(this.getClass().getName()).warn("IP: " + request.getRemoteAddr()  + " - old profile picture could not be deleted, filename: " + oldPicture.getName());
         }
 
         session.setAttribute("profilePicture", filename);

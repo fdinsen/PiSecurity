@@ -198,10 +198,11 @@ public class UploadProfilePicture extends Command {
             file.setWritable(true, true);
             file.setExecutable(false);
         }else{
-            perms.add(PosixFilePermission.OWNER_READ);
-            perms.add(PosixFilePermission.OWNER_WRITE);
+            //TODO find a new solution
+            //perms.add(PosixFilePermission.OWNER_READ);
+            //perms.add(PosixFilePermission.OWNER_WRITE);
 
-            Files.setPosixFilePermissions(file.toPath(), perms);
+            //Files.setPosixFilePermissions(file.toPath(), perms);
         }
     }
 }

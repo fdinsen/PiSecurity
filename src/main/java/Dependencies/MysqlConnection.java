@@ -3,6 +3,8 @@ package Dependencies;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import org.apache.log4j.Logger;
+import org.apache.log4j.Priority;
 
 public class MysqlConnection  {
     public static Connection connect() {
@@ -26,6 +28,7 @@ public class MysqlConnection  {
         }
         catch (SQLException e)
         {
+            Logger.getLogger("MysqlConnection").error("Mysql connection could not be set up.");
             System.out.println("An error occurred. Maybe user/password is invalid");
             e.printStackTrace();
         }

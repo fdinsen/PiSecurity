@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class GetCreateBoard extends Command {
 
@@ -32,13 +33,14 @@ public class GetCreateBoard extends Command {
         request.setAttribute("catId", catIdString);
 
         //Get categories
-        try{
-            CategoryFacade categoryFacade  = new CategoryFacade();
+        try {
+            CategoryFacade categoryFacade = new CategoryFacade();
             List<CategoryDTO> categories = categoryFacade.getAllCategories();
             request.setAttribute("categories", categories);
-        }catch (DBErrorException e) {
+        } catch (DBErrorException e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get create board");
             request.setAttribute("errMsg", e.getMessage());
-        }catch (Exception e){
+        } catch (Exception e) {
             request.setAttribute("errMsg", "Something went wrong while getting categories from DB");
             return "createBoard";
         }

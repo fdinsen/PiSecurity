@@ -12,19 +12,21 @@ import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class CategoryDaoImpl implements ICategoryDao {
 
     @Override
     public CategoryDTO createCategory(String name, User user, EntityManager em) throws DBErrorException {
         CategoryDTO categoryDTO = null;
-        try{
-            categoryDTO = getCategoryFromName(name,false, em);
-        }catch (Exception e){
+        try {
+            categoryDTO = getCategoryFromName(name, false, em);
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not create category " + name + " by user " + user.getEmail());
             throw new DBErrorException("Something went wrong while checking if category already exist");
         }
 
-        if(categoryDTO != null){
+        if (categoryDTO != null) {
             em.close();
             throw new DBErrorException("Category already exist");
         }
@@ -37,16 +39,17 @@ public class CategoryDaoImpl implements ICategoryDao {
             em.persist(category);
             em.getTransaction().commit();
 
-            return  new CategoryDTO(category);
+            return new CategoryDTO(category);
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not create category " + name + " by user " + user.getEmail());
             throw new DBErrorException("Something went wrong while creating category in DB");
-        }finally {
+        } finally {
             em.close();
         }
     }
 
     @Override
-    public CategoryDTO getCategoryFromName(String catName,Boolean closeEM,EntityManager em) throws DBErrorException {
+    public CategoryDTO getCategoryFromName(String catName, Boolean closeEM, EntityManager em) throws DBErrorException {
         Category category = null;
 
         //find category in db
@@ -55,14 +58,14 @@ public class CategoryDaoImpl implements ICategoryDao {
             query.setParameter("catName", catName);
             category = query.getSingleResult();
 
-            return  new CategoryDTO(category);
-        } catch (NoResultException nre){
+            return new CategoryDTO(category);
+        } catch (NoResultException nre) {
             return null;
         } catch (Exception e) {
             throw new DBErrorException("Something went wrong while getting category from category name");
-        }finally {
-            if(closeEM){
-            em.close();
+        } finally {
+            if (closeEM) {
+                em.close();
             }
         }
     }
@@ -78,18 +81,18 @@ public class CategoryDaoImpl implements ICategoryDao {
             CategoryDTO categoryDTO = new CategoryDTO(category);
 
             return categoryDTO;
-        } catch (NoResultException nre){
+        } catch (NoResultException nre) {
             return null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get category " + catId);
             throw new DBErrorException("Something went wrong while getting category from id");
-        }finally {
+        } finally {
             em.close();
         }
     }
 
     @Override
-    public Category getCategoryFromID(int catId,Boolean closeEM, EntityManager em) throws DBErrorException {
+    public Category getCategoryFromID(int catId, Boolean closeEM, EntityManager em) throws DBErrorException {
         Category category = null;
 
         //find category in db
@@ -98,13 +101,13 @@ public class CategoryDaoImpl implements ICategoryDao {
             query.setParameter("catId", catId);
             category = query.getSingleResult();
             return category;
-        } catch (NoResultException nre){
+        } catch (NoResultException nre) {
             return null;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get category with id" + catId);
             throw new DBErrorException("Something went wrong while getting category from id");
-        }finally {
-            if(closeEM) {
+        } finally {
+            if (closeEM) {
                 em.close();
             }
         }
@@ -121,10 +124,11 @@ public class CategoryDaoImpl implements ICategoryDao {
                 categoryDTOS.add(new CategoryDTO(categories.get(i)));
             }
 
-            return  categoryDTOS;
+            return categoryDTOS;
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get categories");
             throw new DBErrorException("Something went wrong while getting all categories");
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -135,17 +139,17 @@ public class CategoryDaoImpl implements ICategoryDao {
             TypedQuery<Category> query = em.createQuery("SELECT c FROM Category c", Category.class);
             List<Category> categories = query.getResultList();
 
-
             List<CategoryDTO> categoryDTOS = new ArrayList<>();
             for (int i = 0; i < categories.size(); i++) {
                 CategoryDTO categoryDTO = new CategoryDTO(categories.get(i));
                 categoryDTOS.add(categoryDTO);
             }
 
-            return  categoryDTOS;
+            return categoryDTOS;
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not get categories");
             throw new DBErrorException("Something went wrong while getting all categories");
-        }finally {
+        } finally {
             em.close();
         }
     }
@@ -157,14 +161,15 @@ public class CategoryDaoImpl implements ICategoryDao {
             em.getTransaction().begin();
 
             //Get category from dto
-            Category category = getCategoryFromID(categoryDTO.getId(),false, em);
+            Category category = getCategoryFromID(categoryDTO.getId(), false, em);
 
             em.remove(category);
             em.getTransaction().commit();
             em.close();
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not delete category " + categoryDTO.getName());
             throw new DBErrorException("Something went wrong while deleting category");
-        }finally {
+        } finally {
             em.close();
         }
 
@@ -175,15 +180,16 @@ public class CategoryDaoImpl implements ICategoryDao {
         try {
             em.getTransaction().begin();
             //Get category from dto
-            Category category = getCategoryFromID(categoryDTO.getId(),false, em);
+            Category category = getCategoryFromID(categoryDTO.getId(), false, em);
 
             category.setName(name);
             category.setUpdatedBy(user);
             em.persist(category);
             em.getTransaction().commit();
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not edit category " + categoryDTO.getName());
             throw new DBErrorException("Something went wrong while editing category");
-        }finally {
+        } finally {
             em.close();
         }
     }

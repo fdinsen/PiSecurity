@@ -8,6 +8,7 @@ import Models.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
+import org.apache.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 public class LoginDaoImpl implements ILoginDao {
@@ -36,6 +37,7 @@ public class LoginDaoImpl implements ILoginDao {
                 return new UserDTO(user);
             }
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not authorize user " + loginDTO.getEmail());
             e.printStackTrace();
         }
         return null;

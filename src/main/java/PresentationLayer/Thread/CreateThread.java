@@ -11,6 +11,7 @@ import PresentationLayer.Command;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.log4j.Logger;
 
 public class CreateThread extends Command {
     public CreateThread(Role[] rolesAllowed) {
@@ -32,9 +33,11 @@ public class CreateThread extends Command {
             threadFacade.createThread(threadName,threadText,boardId,username);
             request.setAttribute("message", "Thread created");
         }catch (DBErrorException | UserNotFoundException | InvalidInputException e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, create thread");
             request.setAttribute("errMessage", e.getMessage());
             return "createThread";
         } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, create thread");
             request.setAttribute("errMessage", "Something went wrong while creating thread");
             return "createThread";
         }

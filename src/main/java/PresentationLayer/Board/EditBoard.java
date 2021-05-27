@@ -11,8 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import org.apache.log4j.Logger;
 
 public class EditBoard extends Command {
+
     public EditBoard(Role[] rolesAllowed) {
         super(rolesAllowed);
     }
@@ -25,10 +27,10 @@ public class EditBoard extends Command {
         String boardName = request.getParameter("name");
         String description = request.getParameter("description");
 
-        try{
+        try {
             //Get username
             HttpSession session = request.getSession();
-            String username = (String)session.getAttribute("username");
+            String username = (String) session.getAttribute("username");
 
             //Setup for
             request.setAttribute("catId", catIdString);
@@ -39,21 +41,23 @@ public class EditBoard extends Command {
 
             //Edit
             BoardFacade boardFacade = new BoardFacade();
-            Boolean beginEdit = boardFacade.editBoard(boardIdString,boardName,description,username,beginEditString);
+            Boolean beginEdit = boardFacade.editBoard(boardIdString, boardName, description, username, beginEditString);
 
             request.setAttribute("editing", beginEdit);
         } catch (UserNotFoundException | InvalidInputException | DBErrorException e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not edit board");
             request.setAttribute("errMsg", e.getMessage());
-        } catch (Exception e){
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).error("Database error, could not edit board");
             request.setAttribute("errMsg", "Something went wrong while updating board");
         }
 
-        try{
+        try {
             //Get boards
             BoardFacade boardFacade = new BoardFacade();
             List<BoardDTO> boardDTOS = boardFacade.getBoardsForCategory(catIdString);
             request.setAttribute("boards", boardDTOS);
-        }catch (InvalidInputException e) {
+        } catch (InvalidInputException e) {
             request.setAttribute("errMsg", e.getMessage());
         } catch (DBErrorException e) {
             request.setAttribute("errMsg", "Something went wrong while getting boards, try to reload");

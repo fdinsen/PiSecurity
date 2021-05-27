@@ -11,7 +11,7 @@ import Facades.Interfaces.ILoginFacade;
 import Facades.LoginFacade;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.apache.log4j.Logger;
 /**
  *
  * @author gamma
@@ -32,6 +32,7 @@ public class ResendActivationEmail extends Command {
         String url = facade.createActivationUrl(request.getRequestURL().toString(), username);
         facade.sendActivationEmail(email, username, url);
         
+        Logger.getLogger(this.getClass().getName()).info("Resent activation email to user " + email);
         request.setAttribute("emailMsg", "An email with an activation link has been sent to your email.");
         return "index";
     }

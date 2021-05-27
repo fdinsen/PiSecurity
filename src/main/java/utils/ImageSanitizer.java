@@ -3,15 +3,7 @@ package utils;
 import org.apache.commons.imaging.ImageInfo;
 import org.apache.commons.imaging.ImageParser;
 import org.apache.commons.imaging.Imaging;
-import org.apache.commons.imaging.formats.bmp.BmpImageParser;
-import org.apache.commons.imaging.formats.dcx.DcxImageParser;
-import org.apache.commons.imaging.formats.gif.GifImageParser;
-import org.apache.commons.imaging.formats.pcx.PcxImageParser;
 import org.apache.commons.imaging.formats.png.PngImageParser;
-import org.apache.commons.imaging.formats.tiff.TiffImageParser;
-import org.apache.commons.imaging.formats.wbmp.WbmpImageParser;
-import org.apache.commons.imaging.formats.xbm.XbmImageParser;
-import org.apache.commons.imaging.formats.xpm.XpmImageParser;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -86,7 +78,7 @@ public class ImageSanitizer {
                 Image initialSizedImage = resizedImage.getScaledInstance(originalWidth, originalHeight, Image.SCALE_SMOOTH);
 
                 // Save image by overwriting the provided source file content
-                BufferedImage sanitizedImage = new BufferedImage(initialSizedImage.getWidth(null), initialSizedImage.getHeight(null), BufferedImage.TYPE_INT_RGB);
+                BufferedImage sanitizedImage = new BufferedImage(initialSizedImage.getWidth(null), initialSizedImage.getHeight(null), BufferedImage.TYPE_INT_ARGB);
                 Graphics bg = sanitizedImage.getGraphics();
                 bg.drawImage(initialSizedImage, 0, 0, null);
                 bg.dispose();

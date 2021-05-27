@@ -13,18 +13,21 @@ import org.apache.commons.fileupload.disk.*;
 import org.apache.commons.fileupload.servlet.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.SystemUtils;
 import utils.ImageSanitizer;
+import utils.ValidationUtils;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
+import java.nio.file.attribute.PosixFilePermission;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public class UploadProfilePicture extends Command {
 
+    File newFile = null;
     File tmpFile = null;
     Path tmpPath = null;
 
@@ -74,7 +77,18 @@ public class UploadProfilePicture extends Command {
             return "profile";
         }
 
+        //Checks extension
+        ValidationUtils validationUtils = new ValidationUtils();
+        if(!validationUtils.isPNGExtension(item.getName())){
+            request.setAttribute("errMsg", "File must be of type png");
+            return "profile";
+        }
 
+        //Checks item contentType
+        if(!item.getContentType().equals("image/png")){
+            request.setAttribute("errMsg", "File must be of type png");
+            return "profile";
+        }
 
         //Get random name
         String filename = UUID.randomUUID().toString().replace('-', '_') + ".png";
@@ -93,25 +107,36 @@ public class UploadProfilePicture extends Command {
             Boolean isSafe = imageSanitizer.madeSafe(tmpFile);
 
             if(!isSafe){
-                request.setAttribute("errMsg", "Something went wrong while uploading profile picture");
+                request.setAttribute("errMsg", "Not a valid png file");
                 safelyRemoveFile(tmpPath);
                 return "profile";
             }
 
-            InputStream uploadedStream = item.getInputStream();
+            //Move sanitized file to upload folder
+            newFile = new File(System.getProperty("user.dir")  + File.separator +  "uploads" +  File.separator + filename);
 
-            OutputStream out = new FileOutputStream(System.getProperty("user.dir")  + File.separator +  "uploads" +  File.separator + filename);
-
-            IOUtils.copy(uploadedStream, out);
+            Files.move(tmpFile.toPath(), newFile.toPath());
 
             request.setAttribute("msg", "Profile picture uploaded");
-        } catch (IOException e) {
+        } catch (Exception e) {
             request.setAttribute("errMsg", "Something went wrong while uploading profile picture");
-        }finally {
+        }
+        finally {
             safelyRemoveFile(tmpPath);
         }
 
-        //TODO set file permissions
+        //set file permissions
+        //read write only
+        //TODO test more
+        try{
+            setPermission(newFile);
+        } catch (Exception e) {
+            safelyRemoveFile(newFile.toPath());
+            request.setAttribute("errMsg", "Something went wrong while uploading profile picture");
+            return "profile";
+        }
+
+
 
         HttpSession session = request.getSession();
         //update in db
@@ -140,11 +165,6 @@ public class UploadProfilePicture extends Command {
         return "profile";
     }
 
-    /**
-     * Utility methods to safely remove a file
-     *
-     * @param p file to remove
-     */
     private static void safelyRemoveFile(Path p) {
         try {
             if (p != null) {
@@ -157,6 +177,20 @@ public class UploadProfilePicture extends Command {
             }
         } catch (Exception e) {
             //TODO LOG
+        }
+    }
+
+    private void setPermission(File file) throws IOException{
+        Set<PosixFilePermission> perms = new HashSet<>();
+        if(SystemUtils.IS_OS_WINDOWS) {
+            file.setReadable(true, true);
+            file.setWritable(true, true);
+            file.setExecutable(false);
+        }else{
+            perms.add(PosixFilePermission.OWNER_READ);
+            perms.add(PosixFilePermission.OWNER_WRITE);
+
+            Files.setPosixFilePermissions(file.toPath(), perms);
         }
     }
 }

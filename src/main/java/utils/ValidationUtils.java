@@ -20,6 +20,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
 import javax.persistence.EntityManager;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -151,5 +153,20 @@ public class ValidationUtils {
         }
 
         return Jsoup.clean(text, Whitelist.basicWithImages());
+    }
+
+    // Function to validate image file extension
+    public boolean isPNGExtension(String str) {
+        if(!str.endsWith("png")){
+            return false;
+        }
+
+        //Count number of dots .
+        long dotCount = str.chars().filter(ch -> ch == '.').count();
+        if(dotCount != 1){
+            return false;
+        }
+
+        return true;
     }
 }

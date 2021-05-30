@@ -60,7 +60,7 @@
                                 <hr> <!--POST END-->
 
                                 <c:forEach var="post" items="${requestScope.thread.posts}">
-                                           <div class="row" align="left"> <!--POST START-->
+                                    <div class="row" align="left"> <!--POST START-->
                                         <div class="col-2 mt-10">
                                             <p>${post.createdBy.username}</p>
                                             <img src="https://www.mico.dk/wp-content/uploads/2020/05/blank-profile-picture-973460_1280.png" style="width: 8rem;">
@@ -75,6 +75,11 @@
                                     </div> 
                                     <hr> <!--POST END-->
                                 </c:forEach>
+                            </div>
+                            <div class="text-center mb-5">
+                                <a href="createPost.jsp?threadId=<c:out value="${requestScope.threadId != null ? requestScope.threadId : param.threadId}"/>">
+                                    <button type="button" class="btn btn-primary">Create new Post</button>
+                                </a>
                             </div>
                         </div>
                     </div>

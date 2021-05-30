@@ -8,6 +8,7 @@ import PresentationLayer.Category.CreateCategory;
 import PresentationLayer.Category.DeleteCategory;
 import PresentationLayer.Category.EditCategory;
 import PresentationLayer.Forum.GetBoard;
+import PresentationLayer.Post.CreatePost;
 import PresentationLayer.Thread.CreateThread;
 import PresentationLayer.Thread.DeleteThread;
 
@@ -41,6 +42,7 @@ public abstract class Command {
         commands.put("createThread", new CreateThread(new Role[]{Role.user, Role.moderator, Role.admin}));
         commands.put("deleteThread", new DeleteThread(new Role[] {Role.user, Role.moderator, Role.admin}));
         commands.put("uploadProfilePicture", new UploadProfilePicture(new Role[] {Role.user, Role.moderator, Role.admin}));
+        commands.put("createPost", new CreatePost(new Role[] {Role.user, Role.moderator, Role.admin}));
     }
 
     public static Command from( HttpServletRequest request ) {
